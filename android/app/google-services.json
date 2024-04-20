@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "359794142198",
+    "project_id": "grace-link-8453c",
+    "storage_bucket": "grace-link-8453c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:359794142198:android:5936a5209e239800d3b5d7",
+        "android_client_info": {
+          "package_name": "com.example.grace_link"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZ9jCrACpzn21gvgDX0miiPaexY_F6tro"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
