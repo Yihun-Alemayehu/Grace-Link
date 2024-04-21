@@ -6,6 +6,7 @@ import 'package:grace_link/auth/presentation/screens/log_in_screen.dart';
 import 'package:grace_link/auth/presentation/screens/register_screen.dart';
 import 'package:grace_link/auth/presentation/screens/verify_email_screen.dart';
 import 'package:grace_link/feed/presentation/screens/home_screen.dart';
+import 'package:grace_link/feed/presentation/screens/main_screen.dart';
 
 class RouteClass {
   static String home = '/';
@@ -15,6 +16,7 @@ class RouteClass {
   static String verifyEmail = '/verify-email';
   static String confirmEmail = '/confirm-email';
   static String authScreen = '/auth-screen';
+  static String mainScreen = '/main-screen';
 
   static getHomeScreen() => home;
   static getRegisterScreen() => register;
@@ -23,6 +25,7 @@ class RouteClass {
   static getVerifyEmailScreen() => verifyEmail;
   static getConfirmEmailScreen() => confirmEmail;
   static getAuthScreen() => authScreen;
+  static getMainScreen() => mainScreen;
 
   static List<GetPage> routes = [
     GetPage(
@@ -56,6 +59,10 @@ class RouteClass {
     GetPage(
       name: authScreen,
       page: () => const AuthScreen(),
+    ),
+    GetPage(
+      name: mainScreen,
+      page: () => const MainScreen(),
     ),
   ];
 }

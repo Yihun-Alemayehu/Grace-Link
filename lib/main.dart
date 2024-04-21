@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:grace_link/auth/presentation/auth_bloc/auth_bloc.dart';
 import 'package:grace_link/firebase_options.dart';
 import 'package:grace_link/shared/route/routes.dart';
@@ -33,8 +34,11 @@ class MyApp extends StatelessWidget {
       designSize: const Size(375, 812),
       builder: (context, child) {
         return  GetMaterialApp(
+          theme: ThemeData(
+            fontFamily: GoogleFonts.playfairDisplay().fontFamily,
+          ),
           debugShowCheckedModeBanner: false,
-          initialRoute: RouteClass.authScreen,
+          initialRoute: RouteClass.mainScreen,
           getPages: RouteClass.routes,
         );
       },
