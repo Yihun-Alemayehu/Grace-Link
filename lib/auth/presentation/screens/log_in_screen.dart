@@ -4,26 +4,24 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:grace_link/auth/presentation/auth_bloc/auth_bloc.dart';
+import 'package:grace_link/feed/presentation/screens/home_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grace_link/shared/route/routes.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class LogInScreen extends StatefulWidget {
+  const LogInScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<LogInScreen> createState() => _LogInScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _LogInScreenState extends State<LogInScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+
   bool _isObscure = true;
-  bool _isObscureConfirm = true;
 
   String? validateEmail(String? email) {
     RegExp emailRegex = RegExp(r'^[\w\.-]+@[\w-]+\.\w{2,3}(\.\w{2,3})?$');
@@ -45,13 +43,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
               key: _formKey,
               child: BlocConsumer<AuthBloc, AuthState>(
                 listener: (context, state) {
-                  if (state is SignedUpState) {
-                    Get.toNamed(RouteClass.verifyEmail);
+                  if (state is SignedInState) {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomeScreen(),
+                        ),
+                        (route) => false);
                   } else if (state is ErrorState) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content:
-                            Text('Error has occured ${state.errorMessage}'),
+                        content: Text(state.errorMessage),
                       ),
                     );
                   }
@@ -80,7 +82,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         height: 4.h,
                       ),
                       Text(
-                        'Create an account to continue',
+                        'Let\'s sign you in',
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 14.sp,
@@ -122,52 +124,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           validator: validateEmail,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Text(
-                        'Full name',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14.sp,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 68.h,
-                        width: 305.w,
-                        child: FormBuilderTextField(
-                          controller: _nameController,
-                          name: 'name',
-                          decoration: InputDecoration(
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.grey.shade300),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.grey.shade300),
-                            ),
-                            hintText: 'Full name',
-                            hintStyle: const TextStyle(color: Colors.grey),
-                            prefixIcon: Padding(
-                              padding: EdgeInsets.only(right: 10.w),
-                              child: const Icon(Icons.person),
-                            ),
-                            prefixIconConstraints: BoxConstraints(
-                              minWidth: 20.w,
-                            ),
-                          ),
-                          validator: (name) {
-                            List<String> nameParts = name!.split(' ');
-                            if (nameParts.length < 2) {
-                              return 'Please enter a full name';
-                            } else if (nameParts[1].isEmpty) {
-                              return 'Please enter a valid full name';
-                            }
-                            return null;
-                          },
                         ),
                       ),
                       SizedBox(
@@ -226,65 +182,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 10.h,
-                      ),
-                      Text(
-                        'Confirm password',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14.sp,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 68.h,
-                        width: 305.w,
-                        child: FormBuilderTextField(
-                            controller: _confirmPasswordController,
-                            name: 'Confirm password',
-                            decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.grey.shade300),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.grey.shade300),
-                              ),
-                              hintText: 'confirm password',
-                              hintStyle: const TextStyle(color: Colors.grey),
-                              prefixIcon: Padding(
-                                padding: EdgeInsets.only(right: 10.w),
-                                child: const Icon(Icons.lock),
-                              ),
-                              prefixIconConstraints: BoxConstraints(
-                                minWidth: 20.w,
-                              ),
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _isObscureConfirm = !_isObscureConfirm;
-                                  });
-                                },
-                                icon: _isObscureConfirm
-                                    ? const Icon(
-                                        Icons.visibility_off,
-                                      )
-                                    : const Icon(
-                                        Icons.visibility,
-                                      ),
-                              ),
-                            ),
-                            obscureText: _isObscureConfirm,
-                            validator: (confirm) {
-                              if (confirm!.length < 6) {
-                                return 'Password must be at least 6 characters long';
-                              } else if (confirm != _passwordController.text) {
-                                return 'Passwords do not match';
-                              }
-                              return null;
-                            }),
-                      ),
-                      SizedBox(
                         height: 20.h,
                       ),
                       TextButton(
@@ -294,19 +191,45 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
-                            context.read<AuthBloc>().add(SignUpEvent(
-                                email: _emailController.text,
-                                password: _passwordController.text,
-                                fullName: _nameController.text));
+                            context.read<AuthBloc>().add(
+                                  SignInEvent(
+                                    email: _emailController.text,
+                                    password: _passwordController.text,
+                                  ),
+                                );
                           }
                         },
                         child: Text(
-                          'Sign Up',
+                          'Sign In',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 21.sp,
                           ),
                         ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Row(
+                        children: [
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(RouteClass.forgetPassword);
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 14.w),
+                              child: const Text(
+                                'Forgot Password ?',
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                  color: Colors.blueAccent,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 10.h,
@@ -315,17 +238,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            'Already have an account ?',
+                            'Don\'t have an account ?',
                             style: TextStyle(
                               color: Colors.grey,
                             ),
                           ),
                           TextButton(
                               onPressed: () {
-                                Get.toNamed(RouteClass.login);
+                                Get.toNamed(RouteClass.register);
                               },
                               child: const Text(
-                                'Sign In',
+                                'Sign Up',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w700,

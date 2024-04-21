@@ -13,7 +13,10 @@ class AuthRepo {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   // sign up the user
-  Future<MyUser?> signUp({required String email, required String password, required String fullName}) async {
+  Future<MyUser?> signUp(
+      {required String email,
+      required String password,
+      required String fullName}) async {
     try {
       final userCred = await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -35,11 +38,20 @@ class AuthRepo {
         'followers': const [],
         'posts': const [],
       });
-      final interUser =  await _cloud.collection('users').doc(userCred.user!.uid).get();
+      final interUser =
+          await _cloud.collection('users').doc(userCred.user!.uid).get();
       return MyUser.fromMap(interUser.data()!);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        debugPrint('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        debugPrint('The account already exists for that email.');
+      }
+      return null;
     } catch (e) {
       debugPrint(
           'Error has occured while creating user account ${e.toString()}');
+      return null;
     }
   }
 
@@ -129,14 +141,23 @@ class AuthRepo {
   }
 
   // sign in the user
-  Future<void> signIn({required String email, required String password}) async {
+  Future<User?> signIn({required String email, required String password}) async {
     try {
-      await _auth.signInWithEmailAndPassword(
+      final userCred = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      return userCred.user;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        debugPrint('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        debugPrint('Wrong password provided for that user.');
+      }
+      return null;
     } catch (e) {
       debugPrint('Error has occured while signing in user ${e.toString()}');
+      return null;
     }
   }
 
@@ -146,6 +167,36 @@ class AuthRepo {
       await _auth.signOut();
     } catch (e) {
       debugPrint('Error has occured while signing out user ${e.toString()}');
+    }
+  }
+
+  // Forgot Password
+  Future<void> forgotPassword({required String email}) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      debugPrint('Error has occured while forgetting out user ${e.toString()}');
+    }
+  }
+
+  // verify Email
+  Future<void> sendEmailVerification() async {
+    try {
+      await _auth.currentUser!.sendEmailVerification();
+    } catch (e) {
+      debugPrint(
+          'Error has occured while sending email verification ${e.toString()}');
+    }
+  }
+
+  // reload the user
+  Future<User?> reloadUser() async {
+    try {
+      await _auth.currentUser!.reload();
+      return _auth.currentUser!;
+    } catch (e) {
+      debugPrint('Error has occured while reloading user ${e.toString()}');
+      return null;
     }
   }
 }
