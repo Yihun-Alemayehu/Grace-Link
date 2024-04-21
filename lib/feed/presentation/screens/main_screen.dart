@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:grace_link/feed/presentation/screens/add_post_screen.dart';
 import 'package:grace_link/feed/presentation/screens/chat_screen.dart';
 import 'package:grace_link/feed/presentation/screens/community_screen.dart';
 import 'package:grace_link/feed/presentation/screens/home_screen.dart';
@@ -37,7 +38,14 @@ class _MainScreenState extends State<MainScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(40),
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AddPostScreen(),
+                ),
+                (route) => false);
+          },
           child: const Icon(Icons.add),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -91,8 +99,10 @@ class _MainScreenState extends State<MainScreen> {
                   },
                   child: SizedBox(
                     height: 25.h,
-                    child: Image.asset('assets/messenger.png',
-                    color: 2 == currentTab ? Colors.black : Colors.grey,),
+                    child: Image.asset(
+                      'assets/messenger.png',
+                      color: 2 == currentTab ? Colors.black : Colors.grey,
+                    ),
                   ),
                 ),
                 MaterialButton(

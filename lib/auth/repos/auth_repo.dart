@@ -12,6 +12,11 @@ class AuthRepo {
   final FirebaseFirestore _cloud = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
+  // get current user
+  User? getCurrentUser() {
+    return _auth.currentUser;
+  }
+
   // sign up the user
   Future<MyUser?> signUp(
       {required String email,

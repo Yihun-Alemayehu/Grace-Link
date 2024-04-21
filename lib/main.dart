@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grace_link/auth/presentation/auth_bloc/auth_bloc.dart';
+import 'package:grace_link/feed/presentation/bloc/feed_bloc.dart';
 import 'package:grace_link/firebase_options.dart';
 import 'package:grace_link/shared/route/routes.dart';
 
@@ -18,7 +19,10 @@ void main() async {
       providers: [
         BlocProvider(
           create: (context) => AuthBloc(),
-        )
+        ),
+        BlocProvider(
+          create: (context) => FeedBloc(),
+        ),
       ],
       child: const MyApp(),
     ),
