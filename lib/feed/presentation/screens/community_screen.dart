@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ellipsis_text/flutter_ellipsis_text.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:grace_link/feed/presentation/bloc/feed_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class CommunityScreen extends StatefulWidget {
   const CommunityScreen({super.key});
@@ -77,12 +77,13 @@ class _CommunityScreenState extends State<CommunityScreen> {
                                             top: 8.h,
                                             bottom: 8.h),
                                         child: CircleAvatar(
-                                          backgroundImage: posts.userImageUrl ==
-                                                  ''
-                                              ? const AssetImage(
-                                                      'assets/avatar.png')
-                                                  as ImageProvider<Object>?
-                                              : NetworkImage(posts.userImageUrl),
+                                          backgroundImage:
+                                              posts.userImageUrl == ''
+                                                  ? const AssetImage(
+                                                          'assets/avatar.png')
+                                                      as ImageProvider<Object>?
+                                                  : NetworkImage(
+                                                      posts.userImageUrl),
                                         ),
                                       ),
                                       Column(
@@ -91,7 +92,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
                                         children: [
                                           Text(posts.userFullName),
                                           Text(
-                                            DateFormat.yMMMMEEEEd()
+                                            timeago
                                                 .format(posts.timestamp.toDate())
                                                 .toString(),
                                             style: const TextStyle(
@@ -114,8 +115,9 @@ class _CommunityScreenState extends State<CommunityScreen> {
                                     child: Container(
                                       width: MediaQuery.of(context).size.width *
                                           0.95.w,
-                                      height: MediaQuery.of(context).size.height *
-                                          0.27.h,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.27.h,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         image: DecorationImage(
@@ -155,7 +157,8 @@ class _CommunityScreenState extends State<CommunityScreen> {
                                             right: 8.w,
                                             left: 8.w),
                                         height: 31.h,
-                                        child: Image.asset('assets/comment.png'),
+                                        child:
+                                            Image.asset('assets/comment.png'),
                                       ),
                                       Text(
                                         '74',
@@ -208,7 +211,6 @@ class _CommunityScreenState extends State<CommunityScreen> {
           ),
         ),
       ),
-    
     );
   }
 }

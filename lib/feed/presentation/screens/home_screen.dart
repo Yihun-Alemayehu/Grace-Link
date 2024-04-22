@@ -6,9 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:grace_link/feed/presentation/bloc/feed_bloc.dart';
+import 'package:grace_link/feed/presentation/screens/post_details_screen.dart';
 import 'package:grace_link/shared/route/routes.dart';
-import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,7 +19,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -99,12 +99,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                             top: 8.h,
                                             bottom: 8.h),
                                         child: CircleAvatar(
-                                          backgroundImage: posts.userImageUrl ==
-                                                  ''
-                                              ? const AssetImage(
-                                                      'assets/avatar.png')
-                                                  as ImageProvider<Object>?
-                                              : NetworkImage(posts.userImageUrl),
+                                          backgroundImage:
+                                              posts.userImageUrl == ''
+                                                  ? const AssetImage(
+                                                          'assets/avatar.png')
+                                                      as ImageProvider<Object>?
+                                                  : NetworkImage(
+                                                      posts.userImageUrl),
                                         ),
                                       ),
                                       Column(
@@ -113,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           Text(posts.userFullName),
                                           Text(
-                                            DateFormat.yMMMMEEEEd()
+                                            timeago
                                                 .format(posts.timestamp.toDate())
                                                 .toString(),
                                             style: const TextStyle(
@@ -131,20 +132,33 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ellipsis: '... Show More',
                                     maxLines: 3,
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 5),
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.95.w,
-                                      height: MediaQuery.of(context).size.height *
-                                          0.27.h,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                            posts.imageUrl,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                 PostDetailsScreen(post: posts),
+                                          ));
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 5),
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.95.w,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.27.h,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          image: DecorationImage(
+                                            image: NetworkImage(
+                                              posts.imageUrl,
+                                            ),
+                                            fit: BoxFit.fill,
                                           ),
-                                          fit: BoxFit.fill,
                                         ),
                                       ),
                                     ),
@@ -177,7 +191,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             right: 8.w,
                                             left: 8.w),
                                         height: 31.h,
-                                        child: Image.asset('assets/comment.png'),
+                                        child:
+                                            Image.asset('assets/comment.png'),
                                       ),
                                       Text(
                                         '74',
@@ -230,7 +245,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-    
     );
   }
 }

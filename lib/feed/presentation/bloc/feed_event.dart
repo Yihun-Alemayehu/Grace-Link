@@ -26,3 +26,13 @@ class FetchPostsEvent extends FeedEvent {
   @override
   List<Object> get props => [postType];
 }
+
+class AddCommentEvent extends FeedEvent {
+  final MyPost post;
+  final String postType;
+
+  const AddCommentEvent({required this.post, required this.postType});
+  
+  @override
+  List<Object> get props => [post, postType];
+}

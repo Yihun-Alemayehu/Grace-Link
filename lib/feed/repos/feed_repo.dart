@@ -16,12 +16,12 @@ class FeedRepo {
     try {
       final user = _auth.currentUser!;
       String collectionName = '';
-      if(accountType == 'user'){
+      if (accountType == 'user') {
         collectionName = 'posts';
-      }else if(accountType == 'admin'){
+      } else if (accountType == 'admin') {
         collectionName = 'admin_posts';
       }
-      await _cloud.collection(collectionName).add({
+      final postId = await _cloud.collection(collectionName).add({
         'text': text,
         'imageUrl': imageUrl,
         'userId': user.uid,
@@ -31,6 +31,10 @@ class FeedRepo {
         'comments': [],
         'shares': [],
         'timestamp': Timestamp.now(),
+        'post-id': ''
+      });
+      await _cloud.collection(collectionName).doc(postId.id).update({
+        'post-id': postId.id,
       });
     } catch (e) {
       debugPrint('Error while adding post ${e.toString()}');
@@ -54,12 +58,12 @@ class FeedRepo {
   }
 
   // Fetch posts
-  Future<List<MyPost>> fetchPosts({required String postType})async {
+  Future<List<MyPost>> fetchPosts({required String postType}) async {
     try {
       String collectionName = '';
-      if(postType == 'user'){
+      if (postType == 'user') {
         collectionName = 'posts';
-      }else if(postType == 'admin'){
+      } else if (postType == 'admin') {
         collectionName = 'admin_posts';
       }
       final result = await _cloud.collection(collectionName).get();
@@ -70,6 +74,28 @@ class FeedRepo {
     } catch (e) {
       debugPrint('Error while fetching posts ${e.toString()}');
       return [];
+    }
+  }
+
+  // Add comment
+  Future<void> addComment({required MyPost post, required String postType}) async {
+    try {
+      await _cloud.collection(postType).doc(post.postId).update(
+        {
+          'text': post.text,
+        'imageUrl': post.imageUrl,
+        'userId': post.userId,
+        'userImageUrl': post.userImageUrl,
+        'userFullName': post.userFullName,
+        'likes': [],
+        'comments': post.comments,
+        'shares': [],
+        'timestamp': post.timestamp,
+        'post-id': post.postId,
+        }
+      );
+    } catch (e) {
+      debugPrint('Error while fetching posts ${e.toString()}');
     }
   }
 }

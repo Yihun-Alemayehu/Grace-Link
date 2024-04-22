@@ -30,3 +30,5 @@ class PostsLoaded extends FeedState {
   @override
   List<Object> get props => [posts];
 }
+
+class CommentAddedState extends FeedState {}

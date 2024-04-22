@@ -30,5 +30,14 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         emit(ErrorState(errorMessage: 'Error occured while adding post $e'));
       }
     });
+    on<AddCommentEvent>((event, emit) async{
+      emit(FeedLoading());
+      try {
+        await _feedRepo.addComment(post: event.post, postType: event.postType);
+        emit(CommentAddedState());
+      } catch (e) {
+        emit(ErrorState(errorMessage: 'Error occured while adding post $e'));
+      }
+    });
   }
 }
