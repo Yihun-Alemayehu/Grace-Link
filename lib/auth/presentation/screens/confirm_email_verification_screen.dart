@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:grace_link/auth/presentation/auth_bloc/auth_bloc.dart';
-import 'package:grace_link/feed/presentation/screens/home_screen.dart';
+import 'package:grace_link/auth/presentation/screens/complete_registration_screen.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class ConfirmEmailScreen extends StatelessWidget {
@@ -29,8 +29,12 @@ class ConfirmEmailScreen extends StatelessWidget {
                   ),
                 );
               } else if (state is EmailVerifiedState) {
-                //Get.toNamed(RouteClass.home);
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const HomeScreen(),), (route) => false);
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CompleteRegistrationScreen(),
+                    ),
+                    (route) => false);
               } else if (state is EmailNotVerifiedState) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -42,11 +46,11 @@ class ConfirmEmailScreen extends StatelessWidget {
             },
             builder: (context, state) {
               if (state is AuthLoading) {
-              return Center(
-                child: LoadingAnimationWidget.inkDrop(
-                    color: Colors.black, size: 50),
-              );
-            }
+                return Center(
+                  child: LoadingAnimationWidget.inkDrop(
+                      color: Colors.black, size: 50),
+                );
+              }
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

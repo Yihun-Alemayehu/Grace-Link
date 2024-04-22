@@ -64,26 +64,20 @@ class AuthRepo {
 
   // complete user profile
   Future<void> completeUserProfile(
-      {required String uid,
-      required String firstName,
-      required String lastName,
-      required String userName,
+      {required String userName,
       required String profileUrl,
-      required String coverUrl,
       required String bio,
       required String gender}) async {
     try {
-      await _cloud.collection('users').doc(uid).update({
-        'first-name': firstName,
-        'last-name': lastName,
+      final user = _auth.currentUser!;
+      await _cloud.collection('users').doc(user.uid).update({
         'username': userName,
         'profile-url': profileUrl,
-        'cover-url': coverUrl,
         'bio': bio,
         'gender': gender,
       });
-      await _auth.currentUser!.updateDisplayName('$firstName $lastName');
-      await _auth.currentUser!.updatePhotoURL(profileUrl);
+      // await user.updateDisplayName('$firstName $lastName');
+      await user.updatePhotoURL(profileUrl);
     } catch (e) {
       debugPrint(
           'Error has occured while completing user profile ${e.toString()}');
@@ -91,18 +85,19 @@ class AuthRepo {
   }
 
   // upload profile image
-  Future<String> uploadProfileImage(
-      {required String uid, required File imageFile}) async {
+  Future<String> uploadProfileImage({required File imageFile}) async {
     try {
+      final user = _auth.currentUser!;
       final String randomImageName = '${const Uuid().v4()}.jpg';
-      final storageRef = _storage.ref().child('$uid/profile/$randomImageName');
+      final storageRef =
+          _storage.ref().child('${user.uid}/profile/$randomImageName');
       UploadTask uploadTask = storageRef.putFile(imageFile);
       TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
       String imageUrl = await taskSnapshot.ref.getDownloadURL();
-      await _cloud.collection('users').doc(uid).update({
-        'image-url': imageUrl,
+      await _cloud.collection('users').doc(user.uid).update({
+        'profile-url': imageUrl,
       });
-      await _auth.currentUser!.updatePhotoURL(imageUrl);
+      await user.updatePhotoURL(imageUrl);
       return imageUrl;
     } catch (e) {
       debugPrint(
@@ -121,7 +116,7 @@ class AuthRepo {
       TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
       String imageUrl = await taskSnapshot.ref.getDownloadURL();
       await _cloud.collection('users').doc(uid).update({
-        'image-url': imageUrl,
+        'cover-url': imageUrl,
       });
       return imageUrl;
     } catch (e) {
@@ -135,10 +130,9 @@ class AuthRepo {
   Future<void> updateProfileImage(
       {required String userId, required File imageFile}) async {
     try {
-      final imageUrl =
-          await uploadProfileImage(uid: userId, imageFile: imageFile);
+      final imageUrl = await uploadProfileImage(imageFile: imageFile);
       await _cloud.collection('users').doc(userId).update({
-        'image-url': imageUrl,
+        'profile-url': imageUrl,
       });
       await _auth.currentUser!.updatePhotoURL(imageUrl);
     } catch (e) {

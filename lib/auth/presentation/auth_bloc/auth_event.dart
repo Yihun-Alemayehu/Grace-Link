@@ -43,3 +43,19 @@ class VerifyEmailEvent extends AuthEvent {}
 class EmailVerifiedEvent extends AuthEvent {}
 
 class ReloadUserEvent extends AuthEvent {}
+
+class CompleteProfileEvent extends AuthEvent {
+  final String username;
+  final String bio;
+  final String gender;
+  final File profileImage;
+
+  const CompleteProfileEvent(
+      {required this.username,
+      required this.bio,
+      required this.gender,
+      required this.profileImage});
+
+  @override
+  List<Object> get props => [username, bio, gender, profileImage];
+}

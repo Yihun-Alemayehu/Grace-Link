@@ -1,5 +1,6 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:grace_link/auth/presentation/screens/auth_screen.dart';
+import 'package:grace_link/auth/presentation/screens/complete_registration_screen.dart';
 import 'package:grace_link/auth/presentation/screens/confirm_email_verification_screen.dart';
 import 'package:grace_link/auth/presentation/screens/forget_password_screen.dart';
 import 'package:grace_link/auth/presentation/screens/log_in_screen.dart';
@@ -17,6 +18,7 @@ class RouteClass {
   static String confirmEmail = '/confirm-email';
   static String authScreen = '/auth-screen';
   static String mainScreen = '/main-screen';
+  static String completeRegistrationScreen= '/complete-registration-screen';
 
   static getHomeScreen() => home;
   static getRegisterScreen() => register;
@@ -26,6 +28,7 @@ class RouteClass {
   static getConfirmEmailScreen() => confirmEmail;
   static getAuthScreen() => authScreen;
   static getMainScreen() => mainScreen;
+  static getCompleteRegistrationScreen() => completeRegistrationScreen;
 
   static List<GetPage> routes = [
     GetPage(
@@ -63,6 +66,10 @@ class RouteClass {
     GetPage(
       name: mainScreen,
       page: () => const MainScreen(),
+    ),
+    GetPage(
+      name: completeRegistrationScreen,
+      page: () => const CompleteRegistrationScreen(),
     ),
   ];
 }

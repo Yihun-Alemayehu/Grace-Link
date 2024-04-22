@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
             fontFamily: GoogleFonts.playfairDisplay().fontFamily,
           ),
           debugShowCheckedModeBanner: false,
-          initialRoute: RouteClass.mainScreen,
+          initialRoute: RouteClass.authScreen,
           getPages: RouteClass.routes,
         );
       },

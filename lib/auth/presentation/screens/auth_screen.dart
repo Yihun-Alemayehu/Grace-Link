@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grace_link/auth/presentation/screens/log_in_screen.dart';
-import 'package:grace_link/feed/presentation/screens/home_screen.dart';
+import 'package:grace_link/feed/presentation/screens/main_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -19,7 +19,7 @@ class _AuthScreenState extends State<AuthScreen> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const HomeScreen();
+            return const MainScreen();
           } else {
             return const LogInScreen();
           }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,10 +29,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignInEvent>((event, emit) async {
       emit(AuthLoading());
       try {
-        final userCred = await _authRepo.signIn(email: event.email, password: event.password);
-        if(userCred != null){
+        final userCred = await _authRepo.signIn(
+            email: event.email, password: event.password);
+        if (userCred != null) {
           emit(SignedInState(user: userCred));
-        }else {
+        } else {
           emit(const ErrorState(errorMessage: 'Wrong email or password'));
         }
       } catch (e) {
@@ -71,6 +74,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       } catch (e) {
         debugPrint(
             'Error while emitting email Verification state  ${e.toString()}');
+        emit(ErrorState(errorMessage: e.toString()));
+      }
+    });
+    on<CompleteProfileEvent>((event, emit) async {
+      emit(AuthLoading());
+      try {
+        final imageUrl =
+            await _authRepo.uploadProfileImage(imageFile: event.profileImage);
+        await _authRepo.completeUserProfile(
+            userName: event.username,
+            profileUrl: imageUrl,
+            bio: event.bio,
+            gender: event.gender);
+            emit(ProfileCompletedState());
+      } catch (e) {
+        debugPrint('Error while profile compeleted state  ${e.toString()}');
         emit(ErrorState(errorMessage: e.toString()));
       }
     });
