@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:grace_link/feed/model/post_model.dart';
 import 'package:uuid/uuid.dart';
 
 class FeedRepo {
@@ -13,10 +14,13 @@ class FeedRepo {
   // add Post
   Future<void> addPost(String text, String imageUrl) async {
     try {
+      final user = _auth.currentUser!;
       await _cloud.collection('posts').add({
         'text': text,
         'imageUrl': imageUrl,
-        'userId': _auth.currentUser!.uid,
+        'userId': user.uid,
+        'userImageUrl': user.photoURL,
+        'userFullName': user.displayName,
         'likes': [],
         'comments': [],
         'shares': [],
@@ -40,6 +44,20 @@ class FeedRepo {
     } catch (e) {
       debugPrint('Error while adding image ${e.toString()}');
       return '';
+    }
+  }
+
+  // Fetch posts
+  Future<List<MyPost>> fetchPosts()async {
+    try {
+      final result = await _cloud.collection('posts').get();
+      List<MyPost> posts = result.docs.map((doc) {
+        return MyPost.fromMap(doc.data());
+      }).toList();
+      return posts;
+    } catch (e) {
+      debugPrint('Error while fetching posts ${e.toString()}');
+      return [];
     }
   }
 }

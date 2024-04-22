@@ -8,6 +8,8 @@ class MyPost extends Equatable {
   final String text;
   final String imageUrl;
   final String userId;
+  final String userImageUrl;
+  final String userFullName;
   final List<String> likes;
   final List<String> comments;
   final List<String> shares;
@@ -17,6 +19,8 @@ class MyPost extends Equatable {
     required this.text,
     required this.imageUrl,
     required this.userId,
+    required this.userImageUrl,
+    required this.userFullName,
     required this.likes,
     required this.comments,
     required this.shares,
@@ -27,6 +31,8 @@ class MyPost extends Equatable {
     String? text,
     String? imageUrl,
     String? userId,
+    String? userImageUrl,
+    String? userFullName,
     List<String>? likes,
     List<String>? comments,
     List<String>? shares,
@@ -36,6 +42,8 @@ class MyPost extends Equatable {
       text: text ?? this.text,
       imageUrl: imageUrl ?? this.imageUrl,
       userId: userId ?? this.userId,
+      userImageUrl: userImageUrl ?? this.userImageUrl,
+      userFullName: userFullName ?? this.userFullName,
       likes: likes ?? this.likes,
       comments: comments ?? this.comments,
       shares: shares ?? this.shares,
@@ -48,6 +56,8 @@ class MyPost extends Equatable {
       'text': text,
       'imageUrl': imageUrl,
       'userId': userId,
+      'userImageUrl': userImageUrl,
+      'userFullName': userFullName,
       'likes': likes,
       'comments': comments,
       'shares': shares,
@@ -60,6 +70,8 @@ class MyPost extends Equatable {
       text: map['text'] as String,
       imageUrl: map['imageUrl'] as String,
       userId: map['userId'] as String,
+      userImageUrl: map['userImageUrl'] as String,
+      userFullName: map['userFullName'] as String,
       likes: List<String>.from((map['likes'] ?? [])),
       comments: List<String>.from((map['comments'] ?? [])),
       shares: List<String>.from((map['shares'] ?? [])),
@@ -80,6 +92,8 @@ class MyPost extends Equatable {
       text,
       imageUrl,
       userId,
+      userImageUrl,
+      userFullName,
       likes,
       comments,
       shares,

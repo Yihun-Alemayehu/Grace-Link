@@ -148,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontSize: 18.sp,
                                 ),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 12.w, vertical: 8.h),
@@ -167,6 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+    
     );
   }
 }

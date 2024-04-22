@@ -16,3 +16,5 @@ class AddPostEvent extends FeedEvent {
   @override
   List<Object> get props => [text];
 }
+
+class FetchPostsEvent extends FeedEvent {}

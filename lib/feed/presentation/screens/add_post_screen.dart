@@ -1,11 +1,9 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:grace_link/auth/presentation/screens/auth_screen.dart';
-import 'package:grace_link/auth/repos/auth_repo.dart';
 import 'package:grace_link/feed/presentation/bloc/feed_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -18,8 +16,7 @@ class AddPostScreen extends StatefulWidget {
 }
 
 class _AddPostScreenState extends State<AddPostScreen> {
-  final FeedBloc _feedBloc = FeedBloc();
-  final AuthRepo _authRepo = AuthRepo();
+  // final AuthRepo _authRepo = AuthRepo();
   File? _image;
   final ImagePicker _picker = ImagePicker();
 
@@ -33,8 +30,26 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    User? user = _authRepo.getCurrentUser();
+    // User? user = _authRepo.getCurrentUser();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text('Create a post'),
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: const Icon(
+            Icons.close,
+            size: 32,
+          ),
+        ),
+        elevation: 3,
+        backgroundColor: Colors.white,
+        shadowColor: Colors.black,
+        surfaceTintColor: Colors.white,
+      ),
       body: SafeArea(
         child: BlocConsumer<FeedBloc, FeedState>(
           listener: (context, state) {
@@ -61,12 +76,38 @@ class _AddPostScreenState extends State<AddPostScreen> {
               );
             } else {
               return Padding(
-                padding: const EdgeInsets.only(top: 50, right: 20, left: 20),
+                padding: EdgeInsets.only(top: 20.h, right: 20.w, left: 20.w),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Upload picture'),
-                    const SizedBox(
-                      height: 40,
+                    Row(
+                      children: [
+                        const CircleAvatar(
+                          backgroundImage: AssetImage('assets/copy.jpg'),
+                        ),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Yihun Alemayehu'),
+                            Text(
+                              'public',
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    const Text('What\'s on your mind, Yihun ?'),
+                    SizedBox(
+                      height: 20.h,
                     ),
                     _image == null
                         ? GestureDetector(
@@ -77,12 +118,20 @@ class _AddPostScreenState extends State<AddPostScreen> {
                               elevation: 5,
                               borderRadius: BorderRadius.circular(20),
                               child: Container(
-                                width: 150,
-                                height: 150,
+                                width: MediaQuery.of(context).size.width,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.28,
                                 decoration: BoxDecoration(
+                                  color: Colors.white,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
-                                child: const Icon(Icons.camera_alt_rounded),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 80.0.w, vertical: 80.0.h),
+                                  child: SizedBox(
+                                    child: Image.asset('assets/add-image.png'),
+                                  ),
+                                ),
                               ),
                             ),
                           )
@@ -90,8 +139,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             elevation: 5,
                             borderRadius: BorderRadius.circular(20),
                             child: Container(
-                              width: 150,
-                              height: 150,
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height * 0.28.h,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                               ),
@@ -110,6 +159,18 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         controller: _textController,
                         decoration: InputDecoration(
                           hintText: 'type here...',
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                            ),
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
@@ -119,19 +180,21 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     SizedBox(
                       height: 20.h,
                     ),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                          fixedSize: Size(305.w, 48.h),
-                          backgroundColor: Colors.black),
-                      onPressed: () {
-                        context.read<FeedBloc>().add(AddPostEvent(
-                            text: _textController.text, image: _image!));
-                      },
-                      child: Text(
-                        'Post',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 21.sp,
+                    Center(
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            fixedSize: Size(305.w, 48.h),
+                            backgroundColor: Colors.black),
+                        onPressed: () {
+                          context.read<FeedBloc>().add(AddPostEvent(
+                              text: _textController.text, image: _image!));
+                        },
+                        child: Text(
+                          'Post',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 21.sp,
+                          ),
                         ),
                       ),
                     ),

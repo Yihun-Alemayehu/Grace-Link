@@ -27,9 +27,10 @@ class AuthRepo {
         email: email,
         password: password,
       );
+      final user = userCred.user;
 
-      await _cloud.collection('users').doc(userCred.user!.uid).set({
-        'uid': userCred.user!.uid,
+      await _cloud.collection('users').doc(user!.uid).set({
+        'uid': user.uid,
         'first-name': fullName.split(' ')[0],
         'last-name': fullName.split(' ')[1],
         'username': '',
@@ -43,6 +44,7 @@ class AuthRepo {
         'followers': const [],
         'posts': const [],
       });
+      await user.updateDisplayName(fullName);
       final interUser =
           await _cloud.collection('users').doc(userCred.user!.uid).get();
       return MyUser.fromMap(interUser.data()!);
@@ -146,7 +148,8 @@ class AuthRepo {
   }
 
   // sign in the user
-  Future<User?> signIn({required String email, required String password}) async {
+  Future<User?> signIn(
+      {required String email, required String password}) async {
     try {
       final userCred = await _auth.signInWithEmailAndPassword(
         email: email,

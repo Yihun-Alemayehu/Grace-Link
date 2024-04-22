@@ -39,12 +39,11 @@ class _MainScreenState extends State<MainScreen> {
             borderRadius: BorderRadius.circular(40),
           ),
           onPressed: () {
-            Navigator.pushAndRemoveUntil(
+            Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const AddPostScreen(),
-                ),
-                (route) => false);
+                ));
           },
           child: const Icon(Icons.add),
         ),
@@ -68,9 +67,12 @@ class _MainScreenState extends State<MainScreen> {
                       currentTab = 0;
                     });
                   },
-                  child: Icon(
-                    Icons.home,
-                    color: 0 == currentTab ? Colors.black : Colors.grey,
+                  child: SizedBox(
+                    height: 25.h,
+                    child: Image.asset(
+                      'assets/home.png',
+                      color: 0 == currentTab ? Colors.black : Colors.grey,
+                    ),
                   ),
                 ),
                 MaterialButton(
@@ -113,9 +115,12 @@ class _MainScreenState extends State<MainScreen> {
                       currentTab = 3;
                     });
                   },
-                  child: Icon(
-                    Icons.person,
-                    color: 3 == currentTab ? Colors.black : Colors.grey,
+                  child: SizedBox(
+                    height: 25.h,
+                    child: Image.asset(
+                      'assets/user.png',
+                      color: 3 == currentTab ? Colors.black : Colors.grey,
+                    ),
                   ),
                 ),
               ],

@@ -21,3 +21,12 @@ class ErrorState extends FeedState {
   @override
   List<Object> get props => [errorMessage];
 }
+
+class PostsLoaded extends FeedState {
+  final List<MyPost> posts;
+
+  const PostsLoaded({required this.posts});
+
+  @override
+  List<Object> get props => [posts];
+}
