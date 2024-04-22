@@ -1,9 +1,12 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:grace_link/auth/models/user_model.dart';
 import 'package:grace_link/auth/presentation/screens/auth_screen.dart';
+import 'package:grace_link/auth/repos/auth_repo.dart';
 import 'package:grace_link/feed/presentation/bloc/feed_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -16,7 +19,7 @@ class AddPostScreen extends StatefulWidget {
 }
 
 class _AddPostScreenState extends State<AddPostScreen> {
-  // final AuthRepo _authRepo = AuthRepo();
+  final AuthRepo _authRepo = AuthRepo();
   File? _image;
   final ImagePicker _picker = ImagePicker();
 
@@ -28,14 +31,27 @@ class _AddPostScreenState extends State<AddPostScreen> {
     setState(() {});
   }
 
+  MyUser? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUser();
+  }
+
+  Future<void> _getUser() async {
+    _user = await _authRepo.getCurrentMyUser();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    // User? user = _authRepo.getCurrentUser();
+    User? user = _authRepo.getCurrentUser();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Create a post'),
+        title: Text('Create a post ${_user?.accountType}'),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
@@ -60,19 +76,24 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 ),
               );
             } else if (state is PostAddedstate) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AuthScreen(),
-                ),
-              );
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AuthScreen(),
+                  ),
+                  (route) => false);
             }
           },
           builder: (context, state) {
             if (state is FeedLoading) {
               return Center(
-                child: LoadingAnimationWidget.inkDrop(
-                    color: Colors.black, size: 50),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    LoadingAnimationWidget.inkDrop(
+                        color: Colors.black, size: 50),
+                  ],
+                ),
               );
             } else {
               return Padding(
@@ -82,17 +103,20 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   children: [
                     Row(
                       children: [
-                        const CircleAvatar(
-                          backgroundImage: AssetImage('assets/copy.jpg'),
+                        CircleAvatar(
+                          backgroundImage: user!.photoURL == null
+                              ? const AssetImage('assets/avatar.png')
+                                  as ImageProvider<Object>?
+                              : NetworkImage(user.photoURL!),
                         ),
                         SizedBox(
                           width: 10.w,
                         ),
-                        const Column(
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Yihun Alemayehu'),
-                            Text(
+                            Text(user.displayName!),
+                            const Text(
                               'public',
                               style: TextStyle(
                                 color: Colors.grey,
@@ -105,7 +129,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     SizedBox(
                       height: 20.h,
                     ),
-                    const Text('What\'s on your mind, Yihun ?'),
+                    Text(
+                        'What\'s on your mind, ${user.displayName!.split(' ')[0]} ?'),
                     SizedBox(
                       height: 20.h,
                     ),
@@ -140,7 +165,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             borderRadius: BorderRadius.circular(20),
                             child: Container(
                               width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height * 0.28.h,
+                              height:
+                                  MediaQuery.of(context).size.height * 0.28.h,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                               ),
@@ -187,7 +213,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             backgroundColor: Colors.black),
                         onPressed: () {
                           context.read<FeedBloc>().add(AddPostEvent(
-                              text: _textController.text, image: _image!));
+                              text: _textController.text,
+                              image: _image!,
+                              accountType: _user?.accountType ?? 'user'));
                         },
                         child: Text(
                           'Post',

@@ -12,10 +12,16 @@ class FeedRepo {
   final FirebaseFirestore _cloud = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
   // add Post
-  Future<void> addPost(String text, String imageUrl) async {
+  Future<void> addPost(String text, String imageUrl, String accountType) async {
     try {
       final user = _auth.currentUser!;
-      await _cloud.collection('posts').add({
+      String collectionName = '';
+      if(accountType == 'user'){
+        collectionName = 'posts';
+      }else if(accountType == 'admin'){
+        collectionName = 'admin_posts';
+      }
+      await _cloud.collection(collectionName).add({
         'text': text,
         'imageUrl': imageUrl,
         'userId': user.uid,
@@ -48,9 +54,15 @@ class FeedRepo {
   }
 
   // Fetch posts
-  Future<List<MyPost>> fetchPosts()async {
+  Future<List<MyPost>> fetchPosts({required String postType})async {
     try {
-      final result = await _cloud.collection('posts').get();
+      String collectionName = '';
+      if(postType == 'user'){
+        collectionName = 'posts';
+      }else if(postType == 'admin'){
+        collectionName = 'admin_posts';
+      }
+      final result = await _cloud.collection(collectionName).get();
       List<MyPost> posts = result.docs.map((doc) {
         return MyPost.fromMap(doc.data());
       }).toList();

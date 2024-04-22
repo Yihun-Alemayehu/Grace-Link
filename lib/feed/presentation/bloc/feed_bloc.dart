@@ -15,7 +15,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       emit(FeedLoading());
       try {
         final imageUrl = await _feedRepo.addImage(event.image);
-        await _feedRepo.addPost(event.text, imageUrl);
+        await _feedRepo.addPost(event.text, imageUrl,event.accountType);
         emit(PostAddedstate());
       } catch (e) {
         emit(ErrorState(errorMessage: 'Error occured while adding post $e'));
@@ -24,7 +24,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     on<FetchPostsEvent>((event, emit) async{
       emit(FeedLoading());
       try {
-        final posts = await _feedRepo.fetchPosts();
+        final posts = await _feedRepo.fetchPosts(postType: event.postType);
         emit(PostsLoaded(posts: posts));
       } catch (e) {
         emit(ErrorState(errorMessage: 'Error occured while adding post $e'));

@@ -17,6 +17,21 @@ class AuthRepo {
     return _auth.currentUser;
   }
 
+  // get Current MyUser
+  Future<MyUser?> getCurrentMyUser() async {
+    User? user = _auth.currentUser;
+    if (user == null) {
+      return null;
+    }
+    DocumentSnapshot<Map<String, dynamic>> doc =
+        await _cloud.collection('users').doc(user.uid).get();
+    if (doc.exists) {
+      return MyUser.fromMap(doc.data()!);
+    } else {
+      return null;
+    }
+  }
+
   // sign up the user
   Future<MyUser?> signUp(
       {required String email,
