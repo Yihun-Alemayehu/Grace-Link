@@ -42,10 +42,11 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       }
     });
     on<AddCommentToPostEvent>((event, emit) async{
-      emit(FeedLoading());
+      // emit(FeedLoading());
       try {
-        final comments = await _feedRepo.addCommentToPost(event.postId, event.comment, event.postType);
-        emit(CommentAddedState(comments: comments));
+        await _feedRepo.addCommentToPost(event.postId, event.comment, event.postType);
+        final posts = await _feedRepo.fetchPosts(postType: event.postTypeTwo);
+        emit(PostsLoaded(posts: posts));
       } catch (e) {
         emit(ErrorState(errorMessage: 'Error occured while adding post $e'));
       }
@@ -53,9 +54,9 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     on<AddLikeToPostEvent>((event, emit) async{
       // emit(FeedLoading());
       try {
-        final comments = await _feedRepo.addLikeToPost(event.postId, event.like, event.postType);
+        await _feedRepo.addLikeToPost(event.postId, event.like, event.postType);
         final posts = await _feedRepo.fetchPosts(postType: event.postTypeTwo);
-        emit(PostsLoaded(posts: posts));
+        emit(PostsLoaded(posts: posts,));
       } catch (e) {
         emit(ErrorState(errorMessage: 'Error occured while adding post $e'));
       }

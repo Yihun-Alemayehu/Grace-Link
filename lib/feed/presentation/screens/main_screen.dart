@@ -34,7 +34,7 @@ class _MainScreenState extends State<MainScreen> {
           child: currentScreen,
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.grey.shade200,
+          backgroundColor: Colors.black,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(40),
           ),
@@ -45,7 +45,8 @@ class _MainScreenState extends State<MainScreen> {
                   builder: (context) => const AddPostScreen(),
                 ));
           },
-          child: const Icon(Icons.add),
+          child: const Icon(Icons.add,
+          color: Colors.white,),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomAppBar(

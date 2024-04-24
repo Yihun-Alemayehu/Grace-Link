@@ -153,4 +153,36 @@ class FeedRepo {
     List<dynamic> currentLikesAfter = (postSnapshotAfter.data() as Map<String, dynamic>)['likes'] ?? [];
     return currentLikesAfter;
   }
+
+  // Add like to the post
+  Future<bool> isLiked(String postId, MyLike like, String postType) async {
+    DocumentReference postRef = _cloud.collection(postType).doc(postId);
+
+    // Get the current likes array
+    DocumentSnapshot postSnapshot = await postRef.get();
+    List<dynamic> currentLikes = (postSnapshot.data() as Map<String, dynamic>)['likes'] ?? [];
+
+    // Check if the user's like already exists
+    bool userLiked = currentLikes.any((existingLike) => existingLike['uid'] == like.uid);
+
+    if (userLiked) {
+      // Remove the user's like from the likes array
+      currentLikes.removeWhere((existingLike) => existingLike['uid'] == like.uid);
+    } else {
+      // Convert the MyLike object to a Map
+      Map<String, dynamic> likeData = like.toMap();
+
+      // Add the new like
+      currentLikes.add(likeData);
+    }
+
+    // Update the "likes" field of the post document with the updated array
+    await postRef.update({'likes': currentLikes});
+
+    // Retrieve and return the updated likes array
+    DocumentSnapshot postSnapshotAfter = await postRef.get();
+    List<dynamic> currentLikesAfter = (postSnapshotAfter.data() as Map<String, dynamic>)['likes'] ?? [];
+    bool isLiked = currentLikesAfter.any((existingLike) => existingLike['uid'] == like.uid);
+    return isLiked;
+  }
 }

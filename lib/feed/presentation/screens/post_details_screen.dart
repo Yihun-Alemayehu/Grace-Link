@@ -14,7 +14,8 @@ import 'package:timeago/timeago.dart' as timeago;
 class PostDetailsScreen extends StatefulWidget {
   final MyPost post;
   final String postType;
-  const PostDetailsScreen({super.key, required this.post, required this.postType});
+  const PostDetailsScreen(
+      {super.key, required this.post, required this.postType});
 
   @override
   State<PostDetailsScreen> createState() => _PostDetailsScreenState();
@@ -104,7 +105,9 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                   child: Image.asset('assets/heart.png'),
                                 ),
                                 Text(
-                                  '100',
+                                  widget.post.likes.isNotEmpty
+                                      ? widget.post.likes.length.toString()
+                                      : ' ',
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 18.sp,
@@ -170,15 +173,36 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                               child: ListView.builder(
                                 itemCount: widget.post.comments.length,
                                 itemBuilder: (context, index) {
-                                  var commentfinal = Comment(userFullName: 'userFullName', userImage: 'userImage', comment: 'comment', timestamp: Timestamp.now());
-                                  if(state is CommentAddedState){
-                                    commentfinal = Comment.fromMap(state.comments[index]);
+                                  var commentfinal = Comment(
+                                      userFullName: 'userFullName',
+                                      userImage: 'userImage',
+                                      comment: 'comment',
+                                      timestamp: Timestamp.now());
+                                  if (state is CommentAddedState) {
+                                    commentfinal =
+                                        Comment.fromMap(state.comments[index]);
+                                  } else if (state is PostsLoaded) {
+                                    final post = state.posts.firstWhere(
+                                        (element) =>
+                                            element.postId ==
+                                            widget.post.postId);
+                                    commentfinal =
+                                        Comment.fromMap(post.comments[index]);
+                                    debugPrint('---------------------post id-------------'); 
+                                    debugPrint(post.postId); 
+                                    debugPrint('---------------------post id-------------'); 
+                                    debugPrint('---------------------widget.post.post id-------------'); 
+                                    debugPrint(widget.post.postId); 
+                                    debugPrint('---------------------widget.post.post id-------------'); 
+                                  } else {
+                                    commentfinal = Comment.fromMap(
+                                        widget.post.comments[index]);
                                   }
-                                   commentfinal = Comment.fromMap(
-                                      widget.post.comments[index]);
+
                                   return SizedBox(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
@@ -189,9 +213,11 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                                   right: 12.w,
                                                   top: 8.h,
                                                   bottom: 8.h),
-                                              child:  CircleAvatar(
+                                              child: CircleAvatar(
                                                 backgroundColor: Colors.white,
-                                                backgroundImage: commentfinal.userImage == ''
+                                                backgroundImage: commentfinal
+                                                            .userImage ==
+                                                        ''
                                                     ? const AssetImage(
                                                             'assets/avatar.png')
                                                         as ImageProvider<
@@ -200,13 +226,15 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                                         commentfinal.userImage),
                                               ),
                                             ),
-                                             Column(
+                                            Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(commentfinal.userFullName),
                                                 Text(
-                                                  timeago.format(commentfinal.timestamp.toDate()),
+                                                  timeago.format(commentfinal
+                                                      .timestamp
+                                                      .toDate()),
                                                   style: const TextStyle(
                                                       color: Colors.grey),
                                                 ),
@@ -218,10 +246,9 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                         ),
                                         Padding(
                                           padding: EdgeInsets.only(left: 55.w),
-                                          child:  EllipsisText(
+                                          child: EllipsisText(
                                             startScaleIsSmall: true,
-                                            text:
-                                                commentfinal.comment,
+                                            text: commentfinal.comment,
                                             ellipsis: '... Show More',
                                             maxLines: 3,
                                           ),
@@ -250,81 +277,144 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
       bottomNavigationBar: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.07,
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 1.3,
-                child: TextField(
-                  controller: _commentController,
-                  decoration: InputDecoration(
-                      // prefixIcon: const Icon(Icons.comment),
-                      hintText: 'Comment here ...',
-                      // fillColor: Theme.of(context).colorScheme.primaryContainer,
-                      // filled: true,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: Colors.grey[200]!),
-                      )),
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  // MyPost updatedPost = widget.post.copyWith(
-                  //   comments: List<Comment>.from(widget.post.comments)..add(
-                  //     Comment(
-                  //         userFullName: widget.post.userFullName,
-                  //         userImage: widget.post.userImageUrl,
-                  //         comment: _commentController.text,
-                  //         timestamp: Timestamp.now())
-                  //   )
-                  // );
-                  // MyPost updatedPost = widget.post.copyWith(
-                  //     comments: List<dynamic>.from(widget.post.comments)
-                  //       ..add({
-                  //         'userFullName': widget.post.userFullName,
-                  //         'userImage': widget.post.userImageUrl,
-                  //         'comment': _commentController.text,
-                  //         'timestamp': Timestamp.now(),
-                  //       }));
-
-                  // MyPost updatedPost = widget.post.copyWith(comments: [
-                  //   ...widget.post.comments,
-                  //   {
-                  //     'userFullName': widget.post.userFullName,
-                  //     'userImage': widget.post.userImageUrl,
-                  //     'comment': _commentController.text,
-                  //     'timestamp': Timestamp.now(),
-                  //   }
-                  // ]);
-                  // debugPrint(updatedPost.toString());
-
-                  // context.read<FeedBloc>().add(
-                  //       AddCommentEvent(
-                  //         post: updatedPost,
-                  //         postType: 'admin_posts',
-                  //       ),
-                  //     );
-                  context.read<FeedBloc>().add(
-                        AddCommentToPostEvent(
-                          postId: widget.post.postId,
-                          comment: Comment(
-                            userFullName: user!.displayName!,
-                            userImage: user.photoURL ?? '',
-                            comment: _commentController.text,
-                            timestamp: Timestamp.now(),
+        child: GestureDetector(
+          onTap: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * .5,
+                        width: MediaQuery.of(context).size.width * .75,
+                        child: TextField(
+                          autofocus: true,
+                          controller: _commentController,
+                          decoration: InputDecoration(
+                            hintText: 'Comment here ...',
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(color: Colors.grey[400]!),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(color: Colors.grey[400]!),
+                            ),
                           ),
-                          postType: widget.postType,
                         ),
-                      );
-                },
-                icon: SizedBox(
-                  child: Image.asset('assets/send_comment.png'),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: IconButton(
+                          onPressed: () {
+                            context.read<FeedBloc>().add(
+                                  AddCommentToPostEvent(
+                                    postId: widget.post.postId,
+                                    comment: Comment(
+                                      userFullName: user!.displayName!,
+                                      userImage: user.photoURL ?? '',
+                                      comment: _commentController.text,
+                                      timestamp: Timestamp.now(),
+                                    ),
+                                    postType: widget.postType,
+                                    postTypeTwo: widget.postType == 'admin_posts' ? 'admin': 'user',
+                                  ),
+                                );
+                            Navigator.pop(context);
+                          },
+                          icon: SizedBox(
+                            height: 25,
+                            width: 25,
+                            child: Image.asset('assets/send_comment.png'),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                    height: 60.h,
+                    width: MediaQuery.of(context).size.width / 1.3,
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.grey[200],
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 10.w),
+                        child: const Text('Comment here...'),
+                      ),
+                    )),
+                IconButton(
+                  onPressed: () {
+                    // MyPost updatedPost = widget.post.copyWith(
+                    //   comments: List<Comment>.from(widget.post.comments)..add(
+                    //     Comment(
+                    //         userFullName: widget.post.userFullName,
+                    //         userImage: widget.post.userImageUrl,
+                    //         comment: _commentController.text,
+                    //         timestamp: Timestamp.now())
+                    //   )
+                    // );
+                    // MyPost updatedPost = widget.post.copyWith(
+                    //     comments: List<dynamic>.from(widget.post.comments)
+                    //       ..add({
+                    //         'userFullName': widget.post.userFullName,
+                    //         'userImage': widget.post.userImageUrl,
+                    //         'comment': _commentController.text,
+                    //         'timestamp': Timestamp.now(),
+                    //       }));
+
+                    // MyPost updatedPost = widget.post.copyWith(comments: [
+                    //   ...widget.post.comments,
+                    //   {
+                    //     'userFullName': widget.post.userFullName,
+                    //     'userImage': widget.post.userImageUrl,
+                    //     'comment': _commentController.text,
+                    //     'timestamp': Timestamp.now(),
+                    //   }
+                    // ]);
+                    // debugPrint(updatedPost.toString());
+
+                    // context.read<FeedBloc>().add(
+                    //       AddCommentEvent(
+                    //         post: updatedPost,
+                    //         postType: 'admin_posts',
+                    //       ),
+                    //     );
+
+                    // context.read<FeedBloc>().add(
+                    //       AddCommentToPostEvent(
+                    //         postId: widget.post.postId,
+                    //         comment: Comment(
+                    //           userFullName: user!.displayName!,
+                    //           userImage: user.photoURL ?? '',
+                    //           comment: _commentController.text,
+                    //           timestamp: Timestamp.now(),
+                    //         ),
+                    //         postType: widget.postType,
+                    //       ),
+                    //     );
+                  },
+                  icon: SizedBox(
+                    child: Image.asset('assets/send_comment.png'),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ellipsis_text/flutter_ellipsis_text.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -68,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ));
                 } else if (state is PostsLoaded) {
                   return Container(
-                    padding: EdgeInsets.only(bottom: 10.h),
+                    padding: EdgeInsets.only(bottom: 80.h),
                     height: MediaQuery.of(context).size.height * 0.9.h,
                     child: ListView.builder(
                       itemCount: state.posts.length,
@@ -196,8 +195,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                               right: 8.w,
                                               left: 8.w),
                                           height: 31.h,
-                                          child:
-                                              Image.asset('assets/heart.png'),
+                                          child: Image.asset(
+                                            'assets/heart.png',
+                                          ),
                                         ),
                                       ),
                                       Text(

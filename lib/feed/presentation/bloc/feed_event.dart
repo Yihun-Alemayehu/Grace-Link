@@ -40,8 +40,9 @@ class AddCommentToPostEvent extends FeedEvent {
   final String postId;
   final Comment comment;
   final String postType;
+  final String postTypeTwo;
 
-  const AddCommentToPostEvent({required this.postId, required this.comment, required this.postType});
+  const AddCommentToPostEvent({required this.postId, required this.comment, required this.postType, required this.postTypeTwo});
   
   @override
   List<Object> get props => [postId, comment];
