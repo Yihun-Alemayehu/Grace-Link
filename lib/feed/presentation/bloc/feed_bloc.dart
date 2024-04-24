@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:grace_link/feed/model/comment_model.dart';
+import 'package:grace_link/feed/model/like_model.dart';
 import 'package:grace_link/feed/model/post_model.dart';
 import 'package:grace_link/feed/repos/feed_repo.dart';
 
@@ -33,8 +35,27 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     on<AddCommentEvent>((event, emit) async{
       emit(FeedLoading());
       try {
-        await _feedRepo.addComment(post: event.post, postType: event.postType);
-        emit(CommentAddedState());
+        // await _feedRepo.addComment(post: event.post, postType: event.postType);
+        // emit(CommentAddedState());
+      } catch (e) {
+        emit(ErrorState(errorMessage: 'Error occured while adding post $e'));
+      }
+    });
+    on<AddCommentToPostEvent>((event, emit) async{
+      emit(FeedLoading());
+      try {
+        final comments = await _feedRepo.addCommentToPost(event.postId, event.comment, event.postType);
+        emit(CommentAddedState(comments: comments));
+      } catch (e) {
+        emit(ErrorState(errorMessage: 'Error occured while adding post $e'));
+      }
+    });
+    on<AddLikeToPostEvent>((event, emit) async{
+      // emit(FeedLoading());
+      try {
+        final comments = await _feedRepo.addLikeToPost(event.postId, event.like, event.postType);
+        final posts = await _feedRepo.fetchPosts(postType: event.postTypeTwo);
+        emit(PostsLoaded(posts: posts));
       } catch (e) {
         emit(ErrorState(errorMessage: 'Error occured while adding post $e'));
       }

@@ -11,7 +11,7 @@ class MyPost extends Equatable {
   final String userId;
   final String userImageUrl;
   final String userFullName;
-  final List<String> likes;
+  final List<dynamic> likes;
   final List<dynamic> comments;
   final List<String> shares;
   final Timestamp timestamp;
@@ -36,7 +36,7 @@ class MyPost extends Equatable {
     String? userId,
     String? userImageUrl,
     String? userFullName,
-    List<String>? likes,
+    List<dynamic>? likes,
     List<dynamic>? comments,
     List<String>? shares,
     Timestamp? timestamp,
@@ -81,7 +81,7 @@ class MyPost extends Equatable {
       userId: map['userId'] as String,
       userImageUrl: map['userImageUrl'] as String,
       userFullName: map['userFullName'] as String,
-      likes: List<String>.from((map['likes'] ?? [])),
+      likes: List<dynamic>.from((map['likes'] ?? [])),
       comments: List<dynamic>.from((map['comments'] ?? [])),
       // comments: (map['comments'] as List).map((item) => Comment.fromMap(item as Map<String, dynamic>)).toList(),
       shares: List<String>.from((map['shares'] ?? [])),

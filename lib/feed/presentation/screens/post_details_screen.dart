@@ -1,15 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ellipsis_text/flutter_ellipsis_text.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:grace_link/auth/repos/auth_repo.dart';
+import 'package:grace_link/feed/model/comment_model.dart';
 import 'package:grace_link/feed/model/post_model.dart';
 import 'package:grace_link/feed/presentation/bloc/feed_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class PostDetailsScreen extends StatefulWidget {
   final MyPost post;
-  const PostDetailsScreen({super.key, required this.post});
+  final String postType;
+  const PostDetailsScreen({super.key, required this.post, required this.postType});
 
   @override
   State<PostDetailsScreen> createState() => _PostDetailsScreenState();
@@ -17,10 +22,12 @@ class PostDetailsScreen extends StatefulWidget {
 
 class _PostDetailsScreenState extends State<PostDetailsScreen> {
   final TextEditingController _commentController = TextEditingController();
+  final AuthRepo _authRepo = AuthRepo();
   @override
   Widget build(BuildContext context) {
+    User? user = _authRepo.getCurrentUser();
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
       // appBar: AppBar(),
       body: SafeArea(
         child: Padding(
@@ -116,7 +123,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                   child: Image.asset('assets/comment.png'),
                                 ),
                                 Text(
-                                  '74',
+                                  widget.post.comments.length.toString(),
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 18.sp,
@@ -161,10 +168,17 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                             ),
                             Expanded(
                               child: ListView.builder(
-                                itemCount: 8,
+                                itemCount: widget.post.comments.length,
                                 itemBuilder: (context, index) {
+                                  var commentfinal = Comment(userFullName: 'userFullName', userImage: 'userImage', comment: 'comment', timestamp: Timestamp.now());
+                                  if(state is CommentAddedState){
+                                    commentfinal = Comment.fromMap(state.comments[index]);
+                                  }
+                                   commentfinal = Comment.fromMap(
+                                      widget.post.comments[index]);
                                   return SizedBox(
                                     child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
@@ -175,25 +189,25 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                                   right: 12.w,
                                                   top: 8.h,
                                                   bottom: 8.h),
-                                              child: const CircleAvatar(
+                                              child:  CircleAvatar(
                                                 backgroundColor: Colors.white,
-                                                backgroundImage: '' == ''
-                                                    ? AssetImage(
+                                                backgroundImage: commentfinal.userImage == ''
+                                                    ? const AssetImage(
                                                             'assets/avatar.png')
                                                         as ImageProvider<
                                                             Object>?
                                                     : NetworkImage(
-                                                        'posts.userImageUrl'),
+                                                        commentfinal.userImage),
                                               ),
                                             ),
-                                            const Column(
+                                             Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text('Yihun Alemayehu'),
+                                                Text(commentfinal.userFullName),
                                                 Text(
-                                                  '3 days ago',
-                                                  style: TextStyle(
+                                                  timeago.format(commentfinal.timestamp.toDate()),
+                                                  style: const TextStyle(
                                                       color: Colors.grey),
                                                 ),
                                               ],
@@ -204,14 +218,18 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                         ),
                                         Padding(
                                           padding: EdgeInsets.only(left: 55.w),
-                                          child: const EllipsisText(
+                                          child:  EllipsisText(
                                             startScaleIsSmall: true,
                                             text:
-                                                'Oh, how abundant is your goodness, which you have stored up for those who fear you and worked for those who take refuge in you, in the sight of the children of mankind!',
+                                                commentfinal.comment,
                                             ellipsis: '... Show More',
                                             maxLines: 3,
                                           ),
                                         ),
+                                        const Divider(
+                                          thickness: 0.3,
+                                          color: Colors.grey,
+                                        )
                                       ],
                                     ),
                                   );
@@ -263,24 +281,48 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                   //         timestamp: Timestamp.now())
                   //   )
                   // );
-                  MyPost updatedPost = widget.post.copyWith(
-                      comments: List<dynamic>.from(widget.post.comments)
-                        ..add({
-                          'userFullName': widget.post.userFullName,
-                          'userImage': widget.post.userImageUrl,
-                          'comment': _commentController.text,
-                          'timestamp': Timestamp.now(),
-                        }));
-                  debugPrint(updatedPost.toString());
+                  // MyPost updatedPost = widget.post.copyWith(
+                  //     comments: List<dynamic>.from(widget.post.comments)
+                  //       ..add({
+                  //         'userFullName': widget.post.userFullName,
+                  //         'userImage': widget.post.userImageUrl,
+                  //         'comment': _commentController.text,
+                  //         'timestamp': Timestamp.now(),
+                  //       }));
 
+                  // MyPost updatedPost = widget.post.copyWith(comments: [
+                  //   ...widget.post.comments,
+                  //   {
+                  //     'userFullName': widget.post.userFullName,
+                  //     'userImage': widget.post.userImageUrl,
+                  //     'comment': _commentController.text,
+                  //     'timestamp': Timestamp.now(),
+                  //   }
+                  // ]);
+                  // debugPrint(updatedPost.toString());
+
+                  // context.read<FeedBloc>().add(
+                  //       AddCommentEvent(
+                  //         post: updatedPost,
+                  //         postType: 'admin_posts',
+                  //       ),
+                  //     );
                   context.read<FeedBloc>().add(
-                        AddCommentEvent(
-                          post: updatedPost,
-                          postType: 'admin_posts',
+                        AddCommentToPostEvent(
+                          postId: widget.post.postId,
+                          comment: Comment(
+                            userFullName: user!.displayName!,
+                            userImage: user.photoURL ?? '',
+                            comment: _commentController.text,
+                            timestamp: Timestamp.now(),
+                          ),
+                          postType: widget.postType,
                         ),
                       );
                 },
-                icon: const Icon(Icons.send),
+                icon: SizedBox(
+                  child: Image.asset('assets/send_comment.png'),
+                ),
               ),
             ],
           ),

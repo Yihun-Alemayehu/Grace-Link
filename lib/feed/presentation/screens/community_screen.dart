@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ellipsis_text/flutter_ellipsis_text.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:grace_link/feed/presentation/bloc/feed_bloc.dart';
+import 'package:grace_link/feed/presentation/screens/post_details_screen.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -93,7 +94,8 @@ class _CommunityScreenState extends State<CommunityScreen> {
                                           Text(posts.userFullName),
                                           Text(
                                             timeago
-                                                .format(posts.timestamp.toDate())
+                                                .format(
+                                                    posts.timestamp.toDate())
                                                 .toString(),
                                             style: const TextStyle(
                                                 color: Colors.grey),
@@ -110,21 +112,35 @@ class _CommunityScreenState extends State<CommunityScreen> {
                                     ellipsis: '... Show More',
                                     maxLines: 3,
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 5),
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.95.w,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.27.h,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                            posts.imageUrl,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                PostDetailsScreen(
+                                                    post: posts,
+                                                    postType: 'posts'),
+                                          ));
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 5),
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.95.w,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.27.h,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          image: DecorationImage(
+                                            image: NetworkImage(
+                                              posts.imageUrl,
+                                            ),
+                                            fit: BoxFit.fill,
                                           ),
-                                          fit: BoxFit.fill,
                                         ),
                                       ),
                                     ),
@@ -161,7 +177,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
                                             Image.asset('assets/comment.png'),
                                       ),
                                       Text(
-                                        '74',
+                                        posts.comments.isNotEmpty ? posts.comments.length.toString() : ' ',
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 18.sp,

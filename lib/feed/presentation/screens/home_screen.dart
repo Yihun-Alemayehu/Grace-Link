@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ellipsis_text/flutter_ellipsis_text.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:grace_link/auth/repos/auth_repo.dart';
+import 'package:grace_link/feed/model/like_model.dart';
 import 'package:grace_link/feed/presentation/bloc/feed_bloc.dart';
 import 'package:grace_link/feed/presentation/screens/post_details_screen.dart';
 import 'package:grace_link/shared/route/routes.dart';
@@ -19,6 +22,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final AuthRepo _authRepo = AuthRepo();
   @override
   void initState() {
     super.initState();
@@ -27,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    User? user = _authRepo.getCurrentUser();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -115,7 +120,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Text(posts.userFullName),
                                           Text(
                                             timeago
-                                                .format(posts.timestamp.toDate())
+                                                .format(
+                                                    posts.timestamp.toDate())
                                                 .toString(),
                                             style: const TextStyle(
                                                 color: Colors.grey),
@@ -138,7 +144,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                 PostDetailsScreen(post: posts),
+                                                PostDetailsScreen(
+                                                    post: posts,
+                                                    postType: 'admin_posts'),
                                           ));
                                     },
                                     child: Padding(
@@ -165,17 +173,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   Row(
                                     children: [
-                                      Container(
-                                        padding: EdgeInsets.only(
-                                            top: 8.h,
-                                            bottom: 0,
-                                            right: 8.w,
-                                            left: 8.w),
-                                        height: 31.h,
-                                        child: Image.asset('assets/heart.png'),
+                                      GestureDetector(
+                                        onTap: () {
+                                          context.read<FeedBloc>().add(
+                                                AddLikeToPostEvent(
+                                                    postId: posts.postId,
+                                                    like: MyLike(
+                                                        uid: user!.uid,
+                                                        userFullName:
+                                                            user.displayName!,
+                                                        userImage:
+                                                            user.photoURL!,
+                                                        likesCount: 1),
+                                                    postType: 'admin_posts',
+                                                    postTypeTwo: 'admin'),
+                                              );
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.only(
+                                              top: 8.h,
+                                              bottom: 0,
+                                              right: 8.w,
+                                              left: 8.w),
+                                          height: 31.h,
+                                          child:
+                                              Image.asset('assets/heart.png'),
+                                        ),
                                       ),
                                       Text(
-                                        '100',
+                                        posts.likes.isNotEmpty
+                                            ? posts.likes.length.toString()
+                                            : ' ',
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 18.sp,
@@ -195,7 +223,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                             Image.asset('assets/comment.png'),
                                       ),
                                       Text(
-                                        '74',
+                                        posts.comments.isNotEmpty
+                                            ? posts.comments.length.toString()
+                                            : ' ',
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 18.sp,

@@ -31,4 +31,13 @@ class PostsLoaded extends FeedState {
   List<Object> get props => [posts];
 }
 
-class CommentAddedState extends FeedState {}
+class CommentAddedState extends FeedState {
+  final List<dynamic> comments;
+
+  const CommentAddedState({required this.comments});
+
+  @override
+  List<Object> get props => [comments];
+}
+
+class LikedState extends FeedState {}

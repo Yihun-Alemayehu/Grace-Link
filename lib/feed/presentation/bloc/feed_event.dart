@@ -36,3 +36,25 @@ class AddCommentEvent extends FeedEvent {
   @override
   List<Object> get props => [post, postType];
 }
+class AddCommentToPostEvent extends FeedEvent {
+  final String postId;
+  final Comment comment;
+  final String postType;
+
+  const AddCommentToPostEvent({required this.postId, required this.comment, required this.postType});
+  
+  @override
+  List<Object> get props => [postId, comment];
+}
+
+class AddLikeToPostEvent extends FeedEvent {
+  final String postId;
+  final MyLike like;
+  final String postType;
+  final String postTypeTwo;
+
+  const AddLikeToPostEvent({required this.postId, required this.like, required this.postType, required this.postTypeTwo});
+
+  @override
+  List<Object> get props => [postId, like, postType];
+}
