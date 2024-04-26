@@ -9,6 +9,7 @@ import 'package:grace_link/auth/repos/auth_repo.dart';
 import 'package:grace_link/feed/model/like_model.dart';
 import 'package:grace_link/feed/presentation/bloc/feed_bloc.dart';
 import 'package:grace_link/feed/presentation/screens/post_details_screen.dart';
+import 'package:grace_link/live/presentation/screens/zego_cloud.dart';
 import 'package:grace_link/shared/route/routes.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -36,7 +37,15 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('GraceLink'),
         actions: [
-          const Icon(Icons.sensors_rounded),
+          GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ZegoCloudScreen(),
+                    ));
+              },
+              child: const Icon(Icons.sensors_rounded)),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w),
             child: IconButton(
