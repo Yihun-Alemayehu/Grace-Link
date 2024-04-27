@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:grace_link/live/config/config.dart';
 import 'package:grace_link/live/config/constants.dart';
 import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
@@ -7,33 +9,41 @@ class LiveScreen extends StatelessWidget {
   final String roomID;
   final bool isHost;
   final LayoutMode layoutMode;
+  final User firebaseUser;
 
   const LiveScreen({
     super.key,
     required this.roomID,
-    this.layoutMode = LayoutMode.defaultLayout,
+    required this.layoutMode,
     this.isHost = false,
+    required this.firebaseUser,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: ZegoUIKitPrebuiltLiveAudioRoom(
-          appID: LiveConfig.appId /*input your AppID*/,
-          appSign: LiveConfig.appSign /*input your AppSign*/,
-          userID: localUserID,
-          userName: 'user_$localUserID',
-          roomID: roomID,
-          config: (isHost
-              ? ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
-              : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience())
-            ..seat.takeIndexWhenJoining = isHost ? getHostSeatIndex() : -1
-            ..seat.hostIndexes = getLockSeatIndex()
-            ..seat.layout = getLayoutConfig()
-            ..seat = getSeatConfig()
-            ..background = background()
-            ..inRoomMessage = getMessageViewConfig()
-            // ..userAvatarUrl = 'your_avatar_url'
+    return Scaffold(
+      body: SafeArea(
+        child: ZegoUIKitPrebuiltLiveAudioRoom(
+            appID: LiveConfig.appId,
+            appSign: LiveConfig.appSign,
+            userID: localUserID,
+            userName: firebaseUser.displayName!,
+            roomID: roomID,
+            config: (isHost
+                ? ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+                : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience())
+              ..confirmDialogInfo = getDialogInfo()
+              ..topMenuBar
+              ..duration = ZegoLiveAudioRoomLiveDurationConfig(isVisible: true)
+              ..emptyAreaBuilder
+              ..seat.takeIndexWhenJoining = isHost ? getHostSeatIndex() : -1
+              ..seat.hostIndexes = getLockSeatIndex()
+              ..seat.layout = getLayoutConfig()
+              ..seat = getSeatConfig()
+              ..background = background()
+              ..inRoomMessage = getMessageViewConfig()
+              ..userAvatarUrl = 'your_avatar_url'
+              ..seat.showSoundWaveInAudioMode = true
             // ..onUserCountOrPropertyChanged = (List<ZegoUIKitUser> users) {
             //   debugPrint(
             //       'onUserCountOrPropertyChanged:${users.map((e) => e.toString())}');
@@ -75,22 +85,23 @@ class LiveScreen extends StatelessWidget {
             //   debugPrint('on host seat taking invite sent');
             // }
 
-          /// WARNING: will override prebuilt logic
-          // ..onSeatClicked = (int index, ZegoUIKitUser? user) {
-          //   debugPrint(
-          //       'on seat clicked, index:$index, user:${user.toString()}');
-          //
-          //   showDemoBottomSheet(context);
-          // }
+            /// WARNING: will override prebuilt logic
+            // ..onSeatClicked = (int index, ZegoUIKitUser? user) {
+            //   debugPrint(
+            //       'on seat clicked, index:$index, user:${user.toString()}');
+            //
+            //   showDemoBottomSheet(context);
+            // }
 
-          /// WARNING: will override prebuilt logic
-          // ..onMemberListMoreButtonPressed = (ZegoUIKitUser user) {
-          //   debugPrint(
-          //       'on member list more button pressed, user:${user.toString()}');
-          //
-          //   showDemoBottomSheet(context);
-          // },
-          ),
+            /// WARNING: will override prebuilt logic
+            // ..onMemberListMoreButtonPressed = (ZegoUIKitUser user) {
+            //   debugPrint(
+            //       'on member list more button pressed, user:${user.toString()}');
+            //
+            //   showDemoBottomSheet(context);
+            // },
+            ),
+      ),
     );
   }
 
@@ -102,31 +113,31 @@ class LiveScreen extends StatelessWidget {
           decoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.fill,
-              image: Image.asset('assets/images/background.png').image,
+              image: Image.asset('assets/12.png').image,
             ),
           ),
         ),
-        const Positioned(
-            top: 10,
-            left: 10,
+        Positioned(
+            top: 10.h,
+            left: 10.w,
             child: Text(
-              'Live Audio Room',
+              'GraceLink Live Audio Room',
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: Color(0xff1B1B1B),
-                fontSize: 15,
+                color: const Color(0xff1B1B1B),
+                fontSize: 15.sp,
                 fontWeight: FontWeight.w600,
               ),
             )),
         Positioned(
-          top: 10 + 20,
-          left: 10,
+          top: 30.h,
+          left: 10.w,
           child: Text(
             'ID: $roomID',
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: Color(0xff606060),
-              fontSize: 12,
+            style: TextStyle(
+              color: const Color(0xff606060),
+              fontSize: 12.sp,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -154,6 +165,15 @@ class LiveScreen extends StatelessWidget {
     );
   }
 
+  ZegoLiveAudioRoomDialogInfo getDialogInfo(){
+    return ZegoLiveAudioRoomDialogInfo(
+      cancelButtonName: 'Cancel',
+      confirmButtonName: 'OK',
+      title: 'Leave the room',
+      message: 'Are you sure to leave the room?',
+    );
+  }
+
   ZegoLiveAudioRoomInRoomMessageConfig getMessageViewConfig() {
     return ZegoLiveAudioRoomInRoomMessageConfig(itemBuilder: (
       BuildContext context,
@@ -172,7 +192,7 @@ class LiveScreen extends StatelessWidget {
             child: Container(
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.red,
+                color: Colors.black,
               ),
               width: 10,
               height: 10,
@@ -183,17 +203,13 @@ class LiveScreen extends StatelessWidget {
     });
   }
 
-  Widget avatarBuilder(
-    BuildContext context,
-    Size size,
-    ZegoUIKitUser? user,
-    Map<String, dynamic> extraInfo,
-  ) {
+  Widget avatarBuilder(BuildContext context, Size size, ZegoUIKitUser? user,
+      Map<String, dynamic> extraInfo) {
     return CircleAvatar(
       maxRadius: size.width,
-      backgroundImage: Image.asset(
-              "assets/avatars/avatar_${((int.tryParse(user?.id ?? "") ?? 0) % 6).toString()}.png")
-          .image,
+      backgroundImage: firebaseUser.photoURL! == ''
+          ? const AssetImage('assets/avatar.png') as ImageProvider<Object>?
+          : NetworkImage(firebaseUser.photoURL!),
     );
   }
 

@@ -1,11 +1,13 @@
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:grace_link/live/config/constants.dart';
 import 'package:grace_link/live/presentation/screens/live_screen.dart';
 
 class ZegoCloudScreen extends StatelessWidget {
-   ZegoCloudScreen({super.key});
+  ZegoCloudScreen({super.key});
 
   /// Users who use the same liveID can join the same live audio room.
   final roomIDTextCtrl =
@@ -15,19 +17,15 @@ class ZegoCloudScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buttonStyle = ElevatedButton.styleFrom(
-      fixedSize: const Size(120, 60),
-      backgroundColor: const Color(0xff2C2F3E).withOpacity(0.6),
-    );
-
+  User? firebaseUser = FirebaseAuth.instance.currentUser;
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('User ID:$localUserID'),
-            const Text('Please test with two or more devices'),
+            // const Text('Please test with two or more devices'),
             Align(
               alignment: Alignment.centerRight,
               child: Row(
@@ -54,45 +52,46 @@ class ZegoCloudScreen extends StatelessWidget {
               controller: roomIDTextCtrl,
               decoration: const InputDecoration(labelText: 'join a live by id'),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             // click me to navigate to LivePage
-            ElevatedButton(
-              style: buttonStyle,
+            TextButton(
+              style: TextButton.styleFrom(
+                  fixedSize: Size(305.w, 48.h), backgroundColor: Colors.black),
               onPressed: () {
-                // if (ZegoUIKitPrebuiltLiveAudioRoomMiniOverlayMachine()
-                //     .isMinimizing) {
-                //   /// when the application is minimized (in a minimized state),
-                //   /// disable button clicks to prevent multiple PrebuiltAudioRoom components from being created.
-                //   return;
-                // }
-
                 jumpToLivePage(
                   context,
                   roomID: roomIDTextCtrl.text.trim(),
                   isHost: true,
+                  firebaseUser: firebaseUser,
                 );
               },
-              child: const Text('Start a live'),
+              child: Text(
+                'Start a live',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 21.sp,
+                ),
+              ),
             ),
-            const SizedBox(height: 20),
-            // click me to navigate to LivePage
-            ElevatedButton(
-              style: buttonStyle,
+            SizedBox(height: 20.h),
+            TextButton(
+              style: TextButton.styleFrom(
+                  fixedSize: Size(305.w, 48.h), backgroundColor: Colors.black),
               onPressed: () {
-                // if (ZegoUIKitPrebuiltLiveAudioRoomMiniOverlayMachine()
-                //     .isMinimizing) {
-                //   /// when the application is minimized (in a minimized state),
-                //   /// disable button clicks to prevent multiple PrebuiltAudioRoom components from being created.
-                //   return;
-                // }
-
                 jumpToLivePage(
                   context,
                   roomID: roomIDTextCtrl.text.trim(),
                   isHost: false,
+                  firebaseUser: firebaseUser,
                 );
               },
-              child: const Text('Watch a live'),
+              child: Text(
+                'Watch a live',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 21.sp,
+                ),
+              ),
             ),
           ],
         ),
@@ -101,7 +100,7 @@ class ZegoCloudScreen extends StatelessWidget {
   }
 
   void jumpToLivePage(BuildContext context,
-      {required String roomID, required bool isHost}) {
+      {required String roomID, required bool isHost, required User? firebaseUser}) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -109,6 +108,7 @@ class ZegoCloudScreen extends StatelessWidget {
           roomID: roomID,
           isHost: isHost,
           layoutMode: layoutValueNotifier.value,
+          firebaseUser: firebaseUser!,
         ),
       ),
     );

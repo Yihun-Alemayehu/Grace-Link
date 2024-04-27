@@ -4,8 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:grace_link/auth/presentation/auth_bloc/auth_bloc.dart';
-import 'package:grace_link/feed/presentation/screens/home_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grace_link/feed/presentation/screens/main_screen.dart';
 import 'package:grace_link/shared/route/routes.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -46,7 +46,7 @@ class _LogInScreenState extends State<LogInScreen> {
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const HomeScreen(),
+                          builder: (context) => const MainScreen(),
                         ),
                         (route) => false);
                   } else if (state is ErrorState) {
