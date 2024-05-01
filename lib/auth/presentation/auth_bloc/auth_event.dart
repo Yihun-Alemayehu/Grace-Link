@@ -59,3 +59,7 @@ class CompleteProfileEvent extends AuthEvent {
   @override
   List<Object> get props => [username, bio, gender, profileImage];
 }
+
+class LoadUserProfileEvent extends AuthEvent {
+  
+}

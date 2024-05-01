@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ellipsis_text/flutter_ellipsis_text.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:grace_link/auth/presentation/auth_bloc/auth_bloc.dart';
 import 'package:grace_link/auth/repos/auth_repo.dart';
 import 'package:grace_link/feed/model/like_model.dart';
 import 'package:grace_link/feed/presentation/bloc/feed_bloc.dart';
@@ -23,7 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<FeedBloc>().add(const FetchPostsEvent(postType: 'admin'));
+    context.read<AuthBloc>().add(LoadUserProfileEvent());
   }
 
   @override
@@ -35,7 +36,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           IconButton(
             icon: Icon(Icons.adaptive.more_rounded),
             onPressed: () {
-              // 
+              //
             },
           ),
         ],
@@ -44,194 +45,194 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
           child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // SizedBox(
-                //   height: 40.h,
-                // ),
-                Row(
-                  children: [
-                    Material(
-                      elevation: 8,
-                      borderRadius: BorderRadius.circular(45),
-                      child: CircleAvatar(
-                        radius: 50.r,
-                        backgroundImage: const AssetImage('assets/copy.jpg'),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10.w,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Yihun Alemayehu',
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          '@abi',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 18.sp,
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  fixedSize: Size(100.w, 22.h),
-                                  backgroundColor: Colors.black),
-                              onPressed: () {},
-                              child: Text(
-                                'Follow',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 21.sp,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10.w,
-                            ),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  fixedSize: Size(100.w, 22.h),
-                                  backgroundColor: Colors.black),
-                              onPressed: () {},
-                              child: Text(
-                                'Message',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 21.sp,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 15.h,
-                ),
-                Material(
-                  elevation: 3,
-                  borderRadius: BorderRadius.circular(8.r),
-                  child: SizedBox(
-                    height: 60.h,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+            child: BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, state) {
+                if (state is AuthLoading) {
+                  return Center(
+                    child: LoadingAnimationWidget.inkDrop(
+                        color: Colors.black, size: 50),
+                  );
+                } else if (state is UserProfileLoadedState) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // SizedBox(
+                      //   height: 40.h,
+                      // ),
+                      Row(
                         children: [
+                          Material(
+                            elevation: 8,
+                            borderRadius: BorderRadius.circular(45),
+                            child: CircleAvatar(
+                              radius: 50.r,
+                              backgroundImage: state.myUser.profileUrl == ''
+                                  ? const AssetImage('assets/avatar.png')
+                                      as ImageProvider<Object>?
+                                  : NetworkImage(state.myUser.profileUrl),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10.w,
+                          ),
                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '245',
+                                '${state.myUser.firstName} ${state.myUser.lastName}',
                                 style: TextStyle(
+                                  fontSize: 20.sp,
                                   fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                '@${state.myUser.username}',
+                                style: TextStyle(
+                                  color: Colors.grey,
                                   fontSize: 18.sp,
                                 ),
                               ),
-                              const Text(
-                                'Followers',
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                ),
+                              Row(
+                                children: [
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        fixedSize: Size(100.w, 22.h),
+                                        backgroundColor: Colors.black),
+                                    onPressed: () {},
+                                    child: Text(
+                                      'Follow',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 21.sp,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10.w,
+                                  ),
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        fixedSize: Size(100.w, 22.h),
+                                        backgroundColor: Colors.black),
+                                    onPressed: () {},
+                                    child: Text(
+                                      'Message',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 21.sp,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
-                          ),
-                          VerticalDivider(
-                            color: Colors.grey.shade300,
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                '124',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18.sp,
-                                ),
-                              ),
-                              const Text(
-                                'Following',
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ],
-                          ),
-                          VerticalDivider(
-                            color: Colors.grey.shade300,
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                '36',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18.sp,
-                                ),
-                              ),
-                              const Text(
-                                'Posts',
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ],
-                          ),
+                          )
                         ],
                       ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                Text(
-                  'Posts',
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(
-                  height: 5.h,
-                ),
-                BlocBuilder<FeedBloc, FeedState>(
-                  builder: (context, state) {
-                    if (state is FeedLoading) {
-                      return Center(
-                          child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          LoadingAnimationWidget.inkDrop(
-                              color: Colors.black, size: 50),
-                        ],
-                      ));
-                    } else if (state is PostsLoaded) {
-                      return Container(
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      Material(
+                        elevation: 3,
+                        borderRadius: BorderRadius.circular(8.r),
+                        child: SizedBox(
+                          height: 60.h,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Column(
+                                  children: [
+                                    Text(
+                                      state.myUser.followers.length.toString(),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18.sp,
+                                      ),
+                                    ),
+                                    const Text(
+                                      'Followers',
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                VerticalDivider(
+                                  color: Colors.grey.shade300,
+                                ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      state.myUser.following.length.toString(),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18.sp,
+                                      ),
+                                    ),
+                                    const Text(
+                                      'Following',
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                VerticalDivider(
+                                  color: Colors.grey.shade300,
+                                ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      state.userPosts.length.toString(),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18.sp,
+                                      ),
+                                    ),
+                                    const Text(
+                                      'Posts',
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Text(
+                        'Posts',
+                        style: TextStyle(
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      Container(
                         padding: EdgeInsets.only(bottom: 80.h),
                         height: MediaQuery.of(context).size.height * 0.9.h,
                         child: ListView.builder(
-                          itemCount: state.posts.length,
+                          itemCount: state.userPosts.length,
                           itemBuilder: (context, index) {
-                            final posts = state.posts[index];
+                            final posts = state.userPosts[index];
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 8),
                               child: Expanded(
@@ -268,8 +269,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                       ''
                                                   ? const AssetImage(
                                                           'assets/avatar.png')
-                                                      as ImageProvider<
-                                                          Object>?
+                                                      as ImageProvider<Object>?
                                                   : NetworkImage(
                                                       posts.userImageUrl),
                                             ),
@@ -347,11 +347,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                             uid: user!.uid,
                                                             userFullName: user
                                                                 .displayName!,
-                                                            userImage: user
-                                                                .photoURL!,
+                                                            userImage:
+                                                                user.photoURL!,
                                                             likesCount: 1),
-                                                        postType:
-                                                            'admin_posts',
+                                                        postType: 'admin_posts',
                                                         postTypeTwo: 'admin'),
                                                   );
                                             },
@@ -369,8 +368,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                           Text(
                                             posts.likes.isNotEmpty
-                                                ? posts.likes.length
-                                                    .toString()
+                                                ? posts.likes.length.toString()
                                                 : ' ',
                                             style: TextStyle(
                                               color: Colors.black,
@@ -410,8 +408,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 right: 8.w,
                                                 left: 8.w),
                                             height: 31.h,
-                                            child: Image.asset(
-                                                'assets/send.png'),
+                                            child:
+                                                Image.asset('assets/send.png'),
                                           ),
                                           Text(
                                             '23',
@@ -438,13 +436,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             );
                           },
                         ),
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
-              ],
+                      ),
+                    ],
+                  );
+                } else {
+                  return Container();
+                }
+              },
             ),
           ),
         ),

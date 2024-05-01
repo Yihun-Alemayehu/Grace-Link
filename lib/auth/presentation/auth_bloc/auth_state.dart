@@ -47,3 +47,13 @@ class ErrorState extends AuthState {
 }
 
 class ProfileCompletedState extends AuthState{}
+
+class UserProfileLoadedState extends AuthState{
+  final MyUser myUser;
+  final List<MyPost> userPosts;
+
+  const UserProfileLoadedState({required this.myUser, required this.userPosts});
+
+  @override
+  List<Object> get props => [myUser, userPosts];
+}

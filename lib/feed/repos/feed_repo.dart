@@ -79,6 +79,27 @@ class FeedRepo {
     }
   }
 
+  // Fetch User Posts to display in profile screen
+  Future<List<MyPost>> fetchUserPosts({required String postType})async{
+    try {
+      final uid = _auth.currentUser!.uid;
+      String collectionName = '';
+      if (postType == 'user') {
+        collectionName = 'posts';
+      } else if (postType == 'admin') {
+        collectionName = 'admin_posts';
+      }
+      final result = await _cloud.collection(collectionName).where('userId', isEqualTo: uid).get();
+      List<MyPost> posts = result.docs.map((doc) {
+        return MyPost.fromMap(doc.data());
+      }).toList();
+      return posts;
+    } catch (e) {
+      debugPrint('Error while fetching user posts ${e.toString()}');
+      return [];
+    }
+  }
+
   // Add comment
   Future<void> addComment({required MyPost post, required String postType}) async {
     try {

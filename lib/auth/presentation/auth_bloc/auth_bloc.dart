@@ -6,12 +6,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grace_link/auth/models/user_model.dart';
 import 'package:grace_link/auth/repos/auth_repo.dart';
+import 'package:grace_link/feed/model/post_model.dart';
+import 'package:grace_link/feed/repos/feed_repo.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepo _authRepo = AuthRepo();
+  final FeedRepo _feedRepo = FeedRepo();
   AuthBloc() : super(AuthInitial()) {
     on<SignUpEvent>((event, emit) async {
       emit(AuthLoading());
@@ -87,9 +90,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             profileUrl: imageUrl,
             bio: event.bio,
             gender: event.gender);
-            emit(ProfileCompletedState());
+        emit(ProfileCompletedState());
       } catch (e) {
         debugPrint('Error while profile compeleted state  ${e.toString()}');
+        emit(ErrorState(errorMessage: e.toString()));
+      }
+    });
+    on<LoadUserProfileEvent>((event, emit) async {
+      emit(AuthLoading());
+      try {
+        final myUser = await _authRepo.getCurrentMyUser();
+        final userPosts =
+            await _feedRepo.fetchUserPosts(postType: myUser!.accountType);
+        emit(UserProfileLoadedState(myUser: myUser, userPosts: userPosts));
+      } catch (e) {
+        debugPrint(
+            'Error while emiting UserProfileLoaded state  ${e.toString()}');
         emit(ErrorState(errorMessage: e.toString()));
       }
     });
