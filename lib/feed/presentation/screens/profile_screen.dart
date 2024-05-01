@@ -7,7 +7,6 @@ import 'package:grace_link/auth/presentation/auth_bloc/auth_bloc.dart';
 import 'package:grace_link/auth/repos/auth_repo.dart';
 import 'package:grace_link/feed/model/like_model.dart';
 import 'package:grace_link/feed/presentation/bloc/feed_bloc.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import 'post_details_screen.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -48,17 +47,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: BlocBuilder<AuthBloc, AuthState>(
               builder: (context, state) {
                 if (state is AuthLoading) {
-                  return Center(
-                    child: LoadingAnimationWidget.inkDrop(
-                        color: Colors.black, size: 50),
-                  );
+                  return Container();
                 } else if (state is UserProfileLoadedState) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // SizedBox(
-                      //   height: 40.h,
-                      // ),
                       Row(
                         children: [
                           Material(

@@ -46,6 +46,7 @@ dependencies:
   image_picker: ^1.1.0
   intl: ^0.18.1
   loading_animation_widget: ^1.2.1
+  shimmer: ^3.0.0
   timeago: ^3.6.1
   uuid: ^4.4.0
   zego_uikit_prebuilt_live_audio_room: ^3.6.7

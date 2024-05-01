@@ -7,7 +7,7 @@ import 'package:grace_link/auth/repos/auth_repo.dart';
 import 'package:grace_link/feed/model/like_model.dart';
 import 'package:grace_link/feed/presentation/bloc/feed_bloc.dart';
 import 'package:grace_link/feed/presentation/screens/post_details_screen.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:grace_link/shared/shimmer_effect/home_screen_shimmer_effect.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class CommunityScreen extends StatefulWidget {
@@ -36,15 +36,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
             child: BlocBuilder<FeedBloc, FeedState>(
               builder: (context, state) {
                 if (state is FeedLoading) {
-                  return Center(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      LoadingAnimationWidget.inkDrop(
-                          color: Colors.black, size: 50),
-                    ],
-                  ));
+                  return const HomeScreenShimmerEffect();
                 } else if (state is PostsLoaded) {
                   return Container(
                     padding: EdgeInsets.only(bottom: 30.h),
@@ -57,7 +49,6 @@ class _CommunityScreenState extends State<CommunityScreen> {
                           padding: const EdgeInsets.only(bottom: 8),
                           child: Expanded(
                             child: Container(
-                              // height: MediaQuery.of(context).size.height * 0.39.h,
                               width: MediaQuery.of(context).size.width,
                               decoration: BoxDecoration(
                                 color: Colors.white,

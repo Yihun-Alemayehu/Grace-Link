@@ -11,7 +11,7 @@ import 'package:grace_link/feed/presentation/bloc/feed_bloc.dart';
 import 'package:grace_link/feed/presentation/screens/post_details_screen.dart';
 import 'package:grace_link/live/presentation/screens/zego_cloud.dart';
 import 'package:grace_link/shared/route/routes.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:grace_link/shared/shimmer_effect/home_screen_shimmer_effect.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class HomeScreen extends StatefulWidget {
@@ -65,15 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: BlocBuilder<FeedBloc, FeedState>(
               builder: (context, state) {
                 if (state is FeedLoading) {
-                  return Center(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      LoadingAnimationWidget.inkDrop(
-                          color: Colors.black, size: 50),
-                    ],
-                  ));
+                  return const HomeScreenShimmerEffect();
                 } else if (state is PostsLoaded) {
                   return Container(
                     padding: EdgeInsets.only(bottom: 80.h),
@@ -86,7 +78,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: const EdgeInsets.only(bottom: 8),
                           child: Expanded(
                             child: Container(
-                              // height: MediaQuery.of(context).size.height * 0.39.h,
                               width: MediaQuery.of(context).size.width,
                               decoration: BoxDecoration(
                                 color: Colors.white,
