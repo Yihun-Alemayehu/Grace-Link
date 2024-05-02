@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:grace_link/feed/presentation/screens/add_post_screen.dart';
-import 'package:grace_link/feed/presentation/screens/chat_screen.dart';
+import 'package:grace_link/chat/screens/chat_screen.dart';
 import 'package:grace_link/feed/presentation/screens/community_screen.dart';
 import 'package:grace_link/feed/presentation/screens/home_screen.dart';
 import 'package:grace_link/feed/presentation/screens/profile_screen.dart';

@@ -44,12 +44,13 @@ dependencies:
   flutter_screenutil: ^5.9.0
   get: ^4.6.6
   google_fonts: 6.1.0
-  image_picker: ^1.1.0
+  image_picker: ^1.1.1
   intl: ^0.18.1
   loading_animation_widget: ^1.2.1
   shimmer: ^3.0.0
   timeago: ^3.6.1
   uuid: ^4.4.0
+  video_player: ^2.8.6
   zego_uikit_prebuilt_live_audio_room: ^3.6.7
 
 dev_dependencies:
