@@ -21,20 +21,8 @@ class ChatRoomScreen extends ConsumerStatefulWidget {
 }
 
 class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
-  late final TextEditingController messageController;
-  late final String chatroomId;
-
-  @override
-  void initState() {
-    messageController = TextEditingController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    messageController.dispose();
-    super.dispose();
-  }
+  final TextEditingController messageController = TextEditingController();
+  String chatroomId = '';
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +42,6 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
               onPressed: Navigator.of(context).pop,
               icon: const Icon(
                 Icons.arrow_back_ios,
-                // color: AppColors.messengerBlue,
               ),
             ),
             titleSpacing: 0,
@@ -122,13 +109,13 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
             child: Container(
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.grey,
+                color: Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(15),
               ),
               child: TextField(
                 controller: messageController,
                 decoration: const InputDecoration(
-                  hintText: 'Aa',
+                  hintText: 'type here...',
                   hintStyle: TextStyle(),
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.only(
@@ -136,7 +123,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                     bottom: 10,
                   ),
                 ),
-                textInputAction: TextInputAction.done,
+                // textInputAction: TextInputAction.done,
               ),
             ),
           ),

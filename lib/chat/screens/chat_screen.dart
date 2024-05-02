@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:grace_link/chat/screens/chat_room.dart';
+import 'package:grace_link/chat/widgets/chats_list.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -48,7 +50,15 @@ class _ChatScreenState extends State<ChatScreen> {
                           side: BorderSide.none,
                           borderRadius: BorderRadius.circular(17)),
                       child: TextFormField(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ChatRoomScreen(
+                                  userId: 'QwuWJ0aOKXgw5f255rG1L1QywmH3'),
+                            ),
+                          );
+                        },
                         readOnly: true,
                         decoration: InputDecoration(
                           hintText: 'Search...',
@@ -85,16 +95,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * .7,
-                  child: ListView.builder(
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return const ListTile(
-                        leading: CircleAvatar(),
-                        title: Text('Zerihun Kassahun'),
-                        subtitle: Text('ok, I\'ll try to do it'),
-                        trailing: Text('3 minutes ago'),
-                      );
-                    },),
+                  child: const ChatsList(),
                 )
               ],
             ),

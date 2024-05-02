@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grace_link/chat/providers/get_user_info_by_id_provider.dart';
@@ -15,7 +16,7 @@ class ChatTile extends ConsumerWidget {
 
   final String userId;
   final String lastMessage;
-  final DateTime lastMessageTs;
+  final Timestamp lastMessageTs;
   final String chatroomId;
 
   @override
@@ -37,7 +38,7 @@ class ChatTile extends ConsumerWidget {
               children: [
                 // Profile Pic
                 CircleAvatar(
-                  radius: 30,
+                  radius: 20,
                   backgroundImage: NetworkImage(user.profileUrl),
                 ),
                 const SizedBox(width: 10),
@@ -67,9 +68,9 @@ class ChatTile extends ConsumerWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          const Text(' → '),
+                          const Spacer(),
                           Text(
-                            timeago.format(lastMessageTs),
+                            timeago.format(lastMessageTs.toDate()),
                             style: const TextStyle(
                               color: Colors.grey,
                             ),
@@ -83,7 +84,7 @@ class ChatTile extends ConsumerWidget {
                 const Padding(
                   padding: EdgeInsets.only(left: 10),
                   child: Icon(
-                    Icons.check_circle_outline,
+                    Icons.check,
                     color: Colors.grey,
                   ),
                 ),

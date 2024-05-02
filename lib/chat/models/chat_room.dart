@@ -1,14 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class ChatRoom extends Equatable {
   final String chatroomId;
   final String lastMessage;
-  final DateTime lastMessageTs;
+  final Timestamp lastMessageTs;
   final List<String> members;
-  final DateTime createdAt;
+  final Timestamp createdAt;
 
   const ChatRoom({
     required this.chatroomId,
@@ -21,9 +22,9 @@ class ChatRoom extends Equatable {
   ChatRoom copyWith({
     String? chatroomId,
     String? lastMessage,
-    DateTime? lastMessageTs,
+    Timestamp? lastMessageTs,
     List<String>? members,
-    DateTime? createdAt,
+    Timestamp? createdAt,
   }) {
     return ChatRoom(
       chatroomId: chatroomId ?? this.chatroomId,
@@ -38,9 +39,9 @@ class ChatRoom extends Equatable {
     return <String, dynamic>{
       'chatroomId': chatroomId,
       'lastMessage': lastMessage,
-      'lastMessageTs': lastMessageTs.millisecondsSinceEpoch,
+      'lastMessageTs': lastMessageTs,
       'members': members,
-      'createdAt': createdAt.millisecondsSinceEpoch,
+      'createdAt': createdAt,
     };
   }
 
@@ -48,9 +49,9 @@ class ChatRoom extends Equatable {
     return ChatRoom(
       chatroomId: map['chatroomId'] as String,
       lastMessage: map['lastMessage'] as String,
-      lastMessageTs: DateTime.fromMillisecondsSinceEpoch(map['lastMessageTs'] as int),
-      members: List<String>.from((map['members'] as List<String>)),
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
+      lastMessageTs: map['lastMessageTs'] ?? Timestamp.now(),
+      members: List<String>.from(map['members'].map((x) => x as String)),
+      createdAt: map['createdAt'] ?? Timestamp.now(),
     );
   }
 

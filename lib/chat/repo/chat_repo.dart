@@ -32,9 +32,9 @@ class ChatRepo {
         ChatRoom chatroom = ChatRoom(
           chatroomId: chatRoomId,
           lastMessage: '',
-          lastMessageTs: DateTime.now(),
+          lastMessageTs: Timestamp.now(),
           members: sortedMembers,
-          createdAt: DateTime.now(),
+          createdAt: Timestamp.now(),
         );
 
         await _cloud.collection('chat_rooms').doc(chatRoomId).set(
@@ -61,7 +61,7 @@ class ChatRepo {
           messageId: messageId,
           senderId: uid,
           receiverId: receiverId,
-          timestamp: DateTime.now(),
+          timestamp: Timestamp.now(),
           seen: false,
           messageType: 'text');
 
@@ -91,7 +91,6 @@ class ChatRepo {
   }) async {
     try {
       final messageId = const Uuid().v1();
-      final now = DateTime.now();
 
       // Save to storage
       Reference ref = _storage.ref(messageType).child(messageId);
@@ -103,7 +102,7 @@ class ChatRepo {
         messageId: messageId,
         senderId: uid,
         receiverId: receiverId,
-        timestamp: now,
+        timestamp: Timestamp.now(),
         seen: false,
         messageType: messageType,
       );
@@ -119,7 +118,7 @@ class ChatRepo {
 
       await myChatroomRef.update({
         'lastMessage': 'send a $messageType',
-        'lastMessageTs': now.millisecondsSinceEpoch,
+        'lastMessageTs': Timestamp.now(),
       });
 
       return null;

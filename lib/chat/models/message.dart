@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class Message extends Equatable {
@@ -8,10 +9,10 @@ class Message extends Equatable {
   final String messageId;
   final String senderId;
   final String receiverId;
-  final DateTime timestamp;
+  final Timestamp timestamp;
   final bool seen;
   final String messageType;
-  
+
   const Message({
     required this.message,
     required this.messageId,
@@ -27,7 +28,7 @@ class Message extends Equatable {
     String? messageId,
     String? senderId,
     String? receiverId,
-    DateTime? timestamp,
+    Timestamp? timestamp,
     bool? seen,
     String? messageType,
   }) {
@@ -48,7 +49,7 @@ class Message extends Equatable {
       'messageId': messageId,
       'senderId': senderId,
       'receiverId': receiverId,
-      'timestamp': timestamp.millisecondsSinceEpoch,
+      'timestamp': timestamp,
       'seen': seen,
       'messageType': messageType,
     };
@@ -60,7 +61,7 @@ class Message extends Equatable {
       messageId: map['messageId'] as String,
       senderId: map['senderId'] as String,
       receiverId: map['receiverId'] as String,
-      timestamp: DateTime.fromMillisecondsSinceEpoch(map['timestamp'] as int),
+      timestamp: map['timestamp'] ?? Timestamp.now(),
       seen: map['seen'] as bool,
       messageType: map['messageType'] as String,
     );
