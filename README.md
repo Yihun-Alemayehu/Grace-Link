@@ -82,17 +82,17 @@ Once the app is up and running, you can explore its features:
 
 ## Screenshots
 <p align = "center">
-<img src="assets/screenshots/1.jpg" alt="Messaging" width="300" />
-<img src="assets/screenshots/2.jpg" alt="Messaging" width="300" />
-<img src="assets/screenshots/3.jpg" alt="Messaging" width="300" />
-<img src="assets/screenshots/4.jpg" alt="Messaging" width="300" />
-<img src="assets/screenshots/5.jpg" alt="Messaging" width="300" />
-<img src="assets/screenshots/6.jpg" alt="Messaging" width="300" />
-<img src="assets/screenshots/7.jpg" alt="Messaging" width="300" />
-<img src="assets/screenshots/8.jpg" alt="Messaging" width="300" />
-<img src="assets/screenshots/9.jpg" alt="Messaging" width="300" />
-<img src="assets/screenshots/10.jpg" alt="Messaging" width="300" />
-<img src="assets/screenshots/11.jpg" alt="Messaging" width="300" />
+<img src="assets/screenshots/1.jpg" alt="Messaging" width="200" />
+<img src="assets/screenshots/2.jpg" alt="Messaging" width="200" />
+<img src="assets/screenshots/3.jpg" alt="Messaging" width="200" />
+<img src="assets/screenshots/4.jpg" alt="Messaging" width="200" />
+<img src="assets/screenshots/5.jpg" alt="Messaging" width="200" />
+<img src="assets/screenshots/6.jpg" alt="Messaging" width="200" />
+<img src="assets/screenshots/7.jpg" alt="Messaging" width="200" />
+<img src="assets/screenshots/8.jpg" alt="Messaging" width="200" />
+<img src="assets/screenshots/9.jpg" alt="Messaging" width="200" />
+<img src="assets/screenshots/10.jpg" alt="Messaging" width="200" />
+<img src="assets/screenshots/11.jpg" alt="Messaging" width="200" />
 </p>
 
 
