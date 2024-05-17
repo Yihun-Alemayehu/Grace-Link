@@ -82,10 +82,12 @@ Once the app is up and running, you can explore its features:
 - **Prayer Wall**: Share and respond to prayer requests.
 
 ## Screenshots
+<p align = "center">
 <img src="assets/screenshots/11.jpg" alt="Messaging" width="100" />
 <img src="assets/screenshots/11.jpg" alt="Messaging" width="100" />
 <img src="assets/screenshots/11.jpg" alt="Messaging" width="100" />
 <img src="assets/screenshots/11.jpg" alt="Messaging" width="100" />
+</p>
 ![Alt Text](assets/screenshots/1.jpg)
 ![Alt Text](assets/screenshots/2.jpg)
 ![Alt Text](assets/screenshots/3.jpg)
