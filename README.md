@@ -55,6 +55,7 @@ Ensure you have the following installed:
 1. Clone the repo
 ```sh
 git clone https://github.com/yourusername/grace-link.git
+```
 
 2. Navigate to the project directory
 ```sh
@@ -123,9 +124,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Contact
 
-Your Name - [@your_twitter_handle](https://twitter.com/your_twitter_handle) - your.email@example.com
-
-Project Link: [https://github.com/yourusername/grace-link](https://github.com/yourusername/grace-link)
+Yihun Alemayehu - yankure01@gmail.com
 
 ## Acknowledgements
 
@@ -133,5 +132,4 @@ Project Link: [https://github.com/yourusername/grace-link](https://github.com/yo
 - [Firebase](https://firebase.google.com/)
 - [Google Cloud Platform](https://cloud.google.com/)
 - [Christian Community Inspiration](https://example.com)
-- [Open Source Contributors](https://github.com/yourusername/grace-link/graphs/contributors)
 ```
