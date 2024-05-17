@@ -18,7 +18,7 @@ class ChatsList extends ConsumerWidget {
           itemCount: chats.length,
           itemBuilder: (context, index) {
             final chat = chats.elementAt(index);
-            final userId = chat.members.firstWhere((userId) => userId != myUid,  orElse: () => '');
+            final userId = chat.members.firstWhere((userId) => userId != myUid);
 
             return ChatTile(
               userId: userId,

@@ -14,15 +14,26 @@ class ChatRoomScreen extends ConsumerStatefulWidget {
 
   final String userId;
 
-  static const routeName = '/chat-screen';
-
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ChatRoomScreenState();
 }
 
 class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
-  final TextEditingController messageController = TextEditingController();
-  String chatroomId = '';
+  late final TextEditingController messageController;
+  late String chatroomId;
+
+  @override
+  void initState() {
+    messageController = TextEditingController();
+    chatroomId = ''; 
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    messageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +44,9 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
           return LoadingAnimationWidget.inkDrop(color: Colors.black, size: 50);
         }
 
-        chatroomId = snapshot.data ?? 'No chatroom Id';
+        if (chatroomId.isEmpty) {
+          chatroomId = snapshot.data ?? 'No chatroom Id';
+        }
 
         return Scaffold(
           backgroundColor: Colors.white,
@@ -53,7 +66,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
             children: [
               Expanded(
                 child: MessagesList(
-                  chatroomId: chatroomId,
+                  chatroomId: chatroomId!,
                 ),
               ),
               const Divider(),
@@ -81,7 +94,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
               if (image == null) return;
               await ref.read(chatProvider).sendFileMessage(
                     file: image,
-                    chatroomId: chatroomId,
+                    chatroomId: chatroomId!,
                     receiverId: widget.userId,
                     messageType: 'image',
                   );
@@ -98,7 +111,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
               if (video == null) return;
               await ref.read(chatProvider).sendFileMessage(
                     file: video,
-                    chatroomId: chatroomId,
+                    chatroomId: chatroomId!,
                     receiverId: widget.userId,
                     messageType: 'video',
                   );
@@ -123,7 +136,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                     bottom: 10,
                   ),
                 ),
-                // textInputAction: TextInputAction.done,
+                textInputAction: TextInputAction.done,
               ),
             ),
           ),
@@ -136,7 +149,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
               // Add functionality to handle send button press
               await ref.read(chatProvider).sendMessage(
                     message: messageController.text,
-                    chatRoomId: chatroomId,
+                    chatRoomId: chatroomId!,
                     receiverId: widget.userId,
                   );
               messageController.clear();

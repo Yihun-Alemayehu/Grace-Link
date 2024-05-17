@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grace_link/chat/providers/get_user_info_by_id_provider.dart';
 import 'package:grace_link/chat/screens/chat_room.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ChatTile extends ConsumerWidget {
@@ -32,7 +33,11 @@ class ChatTile extends ConsumerWidget {
           ),
           child: InkWell(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ChatRoomScreen(userId: userId),));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatRoomScreen(userId: userId),
+                  ));
             },
             child: Row(
               children: [
@@ -97,18 +102,14 @@ class ChatTile extends ConsumerWidget {
         return Container(
           width: double.infinity,
           height: 50,
-          color: Colors.grey,
+          color: Colors.red,
           child: Center(
             child: Text(error.toString()),
           ),
         );
       },
       loading: () {
-        return Container(
-          width: double.infinity,
-          height: 50,
-          color: Colors.grey,
-        );
+        return LoadingAnimationWidget.inkDrop(color: Colors.black, size: 50);
       },
     );
   }
