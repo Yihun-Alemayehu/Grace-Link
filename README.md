@@ -1,6 +1,3 @@
-Sure! Here's a README template tailored for the "Grace-Link Christian Community" social media mobile app:
-
-```markdown
 # Grace-Link Christian Community App
 
 ![License](https://img.shields.io/github/license/yourusername/grace-link)
@@ -57,7 +54,7 @@ Ensure you have the following installed:
 1. Clone the repo
 ```sh
 git clone https://github.com/yourusername/grace-link.git
-```
+
 2. Navigate to the project directory
 ```sh
 cd grace-link
