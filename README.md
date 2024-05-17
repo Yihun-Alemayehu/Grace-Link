@@ -22,8 +22,6 @@
 
 ## About the Project
 
-[![Grace-Link Screenshot](link-to-screenshot.png)](link-to-screenshot.png)
-
 The Grace-Link Christian Community app is designed to foster community, communication, and spiritual growth among members of the Christian faith. Our mission is to provide a safe and welcoming space for Christians to connect, share, and support each other in their faith journey.
 
 ### Features
@@ -54,7 +52,7 @@ Ensure you have the following installed:
 
 1. Clone the repo
 ```sh
-git clone https://github.com/yourusername/grace-link.git
+git clone https://github.com/Yihun-Alemayehu/grace-link.git
 ```
 
 2. Navigate to the project directory
