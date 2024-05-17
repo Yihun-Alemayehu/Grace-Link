@@ -83,9 +83,17 @@ Once the app is up and running, you can explore its features:
 
 ## Screenshots
 
-![Alt Text](assets/1.png)
-![Alt Text](assets/banner.jpg)
-![Alt Text](assets/add-image.png)
+![Alt Text](assets/screenshots/1.jpg)
+![Alt Text](assets/screenshots/2.jpg)
+![Alt Text](assets/screenshots/3.jpg)
+![Alt Text](assets/screenshots/4.jpg)
+![Alt Text](assets/screenshots/5.jpg)
+![Alt Text](assets/screenshots/6.jpg)
+![Alt Text](assets/screenshots/7.jpg)
+![Alt Text](assets/screenshots/8.jpg)
+![Alt Text](assets/screenshots/9.jpg)
+![Alt Text](assets/screenshots/10.jpg)
+![Alt Text](assets/screenshots/11.jpg)
 
 ## Roadmap
 
