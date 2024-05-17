@@ -13,6 +13,7 @@
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Usage](#usage)
+- [Screenshots](#screenshots).
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
@@ -79,6 +80,12 @@ Once the app is up and running, you can explore its features:
 - **Join Groups**: Participate in groups and events that interest you.
 - **Send Messages**: Communicate with other users through private messaging.
 - **Prayer Wall**: Share and respond to prayer requests.
+
+## Screenshots
+
+![Alt Text](assets/1.png)
+![Alt Text](assets/banner.jpg)
+![Alt Text](assets/add-image.png)
 
 ## Roadmap
 
