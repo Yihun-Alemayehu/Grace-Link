@@ -83,22 +83,19 @@ Once the app is up and running, you can explore its features:
 
 ## Screenshots
 <p align = "center">
-<img src="assets/screenshots/11.jpg" alt="Messaging" width="100" />
-<img src="assets/screenshots/11.jpg" alt="Messaging" width="100" />
-<img src="assets/screenshots/11.jpg" alt="Messaging" width="100" />
-<img src="assets/screenshots/11.jpg" alt="Messaging" width="100" />
+<img src="assets/screenshots/1.jpg" alt="Messaging" width="300" />
+<img src="assets/screenshots/2.jpg" alt="Messaging" width="300" />
+<img src="assets/screenshots/3.jpg" alt="Messaging" width="300" />
+<img src="assets/screenshots/4.jpg" alt="Messaging" width="300" />
+<img src="assets/screenshots/5.jpg" alt="Messaging" width="300" />
+<img src="assets/screenshots/6.jpg" alt="Messaging" width="300" />
+<img src="assets/screenshots/7.jpg" alt="Messaging" width="300" />
+<img src="assets/screenshots/8.jpg" alt="Messaging" width="300" />
+<img src="assets/screenshots/9.jpg" alt="Messaging" width="300" />
+<img src="assets/screenshots/10.jpg" alt="Messaging" width="300" />
+<img src="assets/screenshots/11.jpg" alt="Messaging" width="300" />
 </p>
-![Alt Text](assets/screenshots/1.jpg)
-![Alt Text](assets/screenshots/2.jpg)
-![Alt Text](assets/screenshots/3.jpg)
-![Alt Text](assets/screenshots/4.jpg)
-![Alt Text](assets/screenshots/5.jpg)
-![Alt Text](assets/screenshots/6.jpg)
-![Alt Text](assets/screenshots/7.jpg)
-![Alt Text](assets/screenshots/8.jpg)
-![Alt Text](assets/screenshots/9.jpg)
-![Alt Text](assets/screenshots/10.jpg)
-![Alt Text](assets/screenshots/11.jpg)
+
 
 ## Roadmap
 
